@@ -8,4 +8,6 @@
     <string name="txt_title_one">Take notes and\nreview at any time</string>
     <string name="txt_title_two">To-do list for\nthe near future</string>
     <string name="txt_title_three">Use as a personal diary,\nrecord every moment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
