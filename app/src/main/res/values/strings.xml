@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="txt_action_ads">This action can contain ads...</string>
+    <string name="txt_select_language">Select Language</string>
+    <string name="txt_english">English</string>
+    <string name="txt_apply">Apply</string>
+    <string name="txt_next">Next</string>
+    <string name="txt_title_one">Take notes and\nreview at any time</string>
+    <string name="txt_title_two">To-do list for\nthe near future</string>
+    <string name="txt_title_three">Use as a personal diary,\nrecord every moment</string>
 </resources>
