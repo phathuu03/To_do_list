@@ -10,4 +10,10 @@
     <string name="txt_title_three">Use as a personal diary,\nrecord every moment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_note">Note</string>
+    <string name="txt_ask_add">Any notes to add? Add your first note by\nclicking on add button.</string>
+    <string name="txt_reminder">Reminder</string>
+    <string name="txt_archive">Archive</string>
+    <string name="txt_setting">Setting</string>
+    <string name="txt_search">Search</string>
 </resources>

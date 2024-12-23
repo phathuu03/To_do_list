@@ -5,11 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
+import com.example.myapplication.adapter.LanguageAdapter
+import com.example.myapplication.databinding.FragmentChooseLanguageBinding
+import com.example.myapplication.model.Language
 
 
-class ChooseLanguageFragment : Fragment() {
+class ChooseLanguageFragment : Fragment(),LanguageAdapter.OnItemSelectedListener {
+    private lateinit var adapter: LanguageAdapter
 
+private val binding by lazy {
+    FragmentChooseLanguageBinding.inflate(layoutInflater)
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +28,29 @@ class ChooseLanguageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_language, container, false)
+    ): View {
+        val recyclerView = binding.recycleViewLanguage
+        adapter =LanguageAdapter(this)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val controller = findNavController()
+        binding.btnSelectedLanguage.setOnClickListener {
+            controller.navigate(R.id.action_chooseLanguageFragment_to_introFragment)
+
+        }
+
+
+    }
+
+    override fun onItemSelected(item: Language, position: Int) {
+        adapter.updateSelection( position)
     }
 
 

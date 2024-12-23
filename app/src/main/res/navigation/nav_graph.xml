@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.example.myapplication.fragment.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_startFragment_to_chooseLanguageFragment"
+            app:destination="@id/chooseLanguageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseLanguageFragment"
+        android:name="com.example.myapplication.fragment.ChooseLanguageFragment"
+        android:label="fragment_choose_language"
+        tools:layout="@layout/fragment_choose_language" >
+
+        <action
+            android:id="@+id/action_chooseLanguageFragment_to_introFragment"
+            app:destination="@id/introFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="com.example.myapplication.fragment.IntroFragment"
+        android:label="fragment_intro"
+        tools:layout="@layout/fragment_intro" >
+        <action
+            android:id="@+id/action_introFragment_to_introOneFragment"
+            app:destination="@id/introOneFragment" />
+        <action
+            android:id="@+id/action_introFragment_to_introThreeFragment"
+            app:destination="@id/introThreeFragment" />
+        <action
+            android:id="@+id/action_introFragment_to_introTwoFragment"
+            app:destination="@id/introTwoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/introOneFragment"
+        android:name="com.example.myapplication.fragment.IntroOneFragment"
+        android:label="fragment_intro_one"
+        tools:layout="@layout/fragment_intro_one" />
+    <fragment
+        android:id="@+id/introTwoFragment"
+        android:name="com.example.myapplication.fragment.IntroTwoFragment"
+        android:label="fragment_intro_two"
+        tools:layout="@layout/fragment_intro_two" />
+    <fragment
+        android:id="@+id/introThreeFragment"
+        android:name="com.example.myapplication.fragment.IntroThreeFragment"
+        android:label="fragment_intro_three"
+        tools:layout="@layout/fragment_intro_three" >
+        <action
+            android:id="@+id/action_introThreeFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.myapplication.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+</navigation>
