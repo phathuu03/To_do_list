@@ -16,4 +16,14 @@
     <string name="txt_archive">Archive</string>
     <string name="txt_setting">Setting</string>
     <string name="txt_search">Search</string>
+    <string name="txt_empty">It’s empty here!</string>
+    <string name="txt_trash_bin">Trash Bin</string>
+    <string name="txt_trash">Trash</string>
+    <string name="txt_content_trash">Your deleted notes will be shown here</string>
+    <string name="txt_other">Others</string>
+    <string name="txt_shortcuts">Shortcuts</string>
+    <string name="txt_content_shortcuts">Show shortcuts in notification bar</string>
+    <string name="txt_notification">App notification</string>
+    <string name="txt_content_notification">Get new updates and usage tips</string>
+    <string name="txt_language">Language</string>
 </resources>

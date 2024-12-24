@@ -5,14 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.ViewPage2IntroAdapter
 import com.example.myapplication.databinding.FragmentIntroBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.relex.circleindicator.CircleIndicator3
 
 // TODO: Rename parameter arguments, choose names that match
@@ -22,7 +25,7 @@ import me.relex.circleindicator.CircleIndicator3
 class IntroFragment : Fragment() {
     private lateinit var viewPage: ViewPager2
     private lateinit var indicator: CircleIndicator3
-   private lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     private val binding by lazy {
         FragmentIntroBinding.inflate(layoutInflater)
@@ -52,15 +55,25 @@ class IntroFragment : Fragment() {
 
         btnNext.setOnClickListener {
 
-            when(viewPage.currentItem){
+            when (viewPage.currentItem) {
                 0 -> {
-                    viewPage.currentItem =1
+                    viewPage.currentItem = 1
                 }
-                1->{
-                    viewPage.currentItem =2
-                }
-                2 ->{
 
+                1 -> {
+                    viewPage.currentItem = 2
+                }
+
+                2 -> {
+                    val action = IntroFragmentDirections.actionIntroFragmentToHomeFragment()
+                    navController.navigate(
+                        action, NavOptions.Builder()
+                            .setPopUpTo(R.id.introFragment, true)
+                            .setPopUpTo(R.id.chooseLanguageFragment, true)
+                            .build()
+                    )
+                    (requireActivity() as MainActivity).binding.menuNav.visibility = View.VISIBLE
+                    (requireActivity() as MainActivity).binding.btnAdd.visibility = View.VISIBLE
                 }
 
             }

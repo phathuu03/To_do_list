@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F9"
+    android:paddingHorizontal="16dp"
+    tools:context=".fragment.SettingFragment">
+
+    <TextView
+        android:id="@+id/tv_title_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/txt_setting"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_trash_bin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/txt_trash_bin"
+        android:textAllCaps="true"
+        android:textColor="#767A7F"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_setting" />
+
+    <RelativeLayout
+        android:id="@+id/layout_trash"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_item_setting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_trash_bin">
+
+        <ImageView
+            android:id="@+id/img_trash"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/ic_trash" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/img_trash"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title_trash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/txt_trash"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/txt_content_trash"
+                android:textSize="12sp"
+
+                />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_show_trash"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/baseline_arrow_forward_ios_24" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_title_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/txt_language"
+        android:textAllCaps="true"
+        android:textColor="#767A7F"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_trash" />
+
+    <RelativeLayout
+        android:id="@+id/layout_language"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_item_setting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_language">
+
+        <ImageView
+            android:id="@+id/img_language"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/ic_language" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/img_language"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title_language_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/txt_language"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/txt_english"
+                android:textSize="12sp"
+
+                />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_show_language"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/baseline_arrow_forward_ios_24" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_title_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/txt_other"
+        android:textAllCaps="true"
+        android:textColor="#767A7F"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_language" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_item_setting"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_other"
+        android:gravity="center"
+        >
+
+        <RelativeLayout
+            android:id="@+id/layout_shortcuts"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_item_setting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_language"
+            android:layout_marginBottom="16dp"
+            >
+
+            <ImageView
+                android:id="@+id/img_shortcut"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/ic_shortcut" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/img_shortcut"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title_shortcuts_"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/txt_shortcuts"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/txt_content_shortcuts"
+                    android:textSize="12sp"
+
+                    />
+
+            </LinearLayout>
+
+           <Switch
+               android:layout_width="wrap_content"
+               android:layout_height="20dp"
+               android:id="@+id/switch_shortcut"
+               android:layout_alignParentEnd="true"
+               android:layout_centerVertical="true"
+               android:trackTint="#9C73F7"
+               android:thumbTint="#ffffff"
+               tools:ignore="UseSwitchCompatOrMaterialXml"
+               />
+
+
+        </RelativeLayout>
+        <!--       item others 2 -->
+
+        <RelativeLayout
+            android:id="@+id/layout_notification"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_item_setting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_language"
+
+            >
+
+            <ImageView
+                android:id="@+id/img_notification"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/ic_notification" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/img_notification"
+                android:orientation="vertical"
+                tools:ignore="RelativeOverlap">
+
+                <TextView
+                    android:id="@+id/tv_title_notification_"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/txt_notification"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/txt_content_notification"
+                    android:textSize="12sp"
+
+                    />
+
+            </LinearLayout>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:id="@+id/switch_notification"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:trackTint="#9C73F7"
+                android:thumbTint="#ffffff"
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                android:checked="true"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

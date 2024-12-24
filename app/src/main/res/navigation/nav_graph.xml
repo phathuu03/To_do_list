@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+ <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -30,37 +30,43 @@
         android:label="fragment_intro"
         tools:layout="@layout/fragment_intro" >
         <action
-            android:id="@+id/action_introFragment_to_introOneFragment"
-            app:destination="@id/introOneFragment" />
-        <action
-            android:id="@+id/action_introFragment_to_introThreeFragment"
-            app:destination="@id/introThreeFragment" />
-        <action
-            android:id="@+id/action_introFragment_to_introTwoFragment"
-            app:destination="@id/introTwoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/introOneFragment"
-        android:name="com.example.myapplication.fragment.IntroOneFragment"
-        android:label="fragment_intro_one"
-        tools:layout="@layout/fragment_intro_one" />
-    <fragment
-        android:id="@+id/introTwoFragment"
-        android:name="com.example.myapplication.fragment.IntroTwoFragment"
-        android:label="fragment_intro_two"
-        tools:layout="@layout/fragment_intro_two" />
-    <fragment
-        android:id="@+id/introThreeFragment"
-        android:name="com.example.myapplication.fragment.IntroThreeFragment"
-        android:label="fragment_intro_three"
-        tools:layout="@layout/fragment_intro_three" >
-        <action
-            android:id="@+id/action_introThreeFragment_to_homeFragment"
+            android:id="@+id/action_introFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.myapplication.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/action_homeFragment_to_reminderFragment"
+            app:destination="@id/reminderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reminderFragment"
+        android:name="com.example.myapplication.fragment.ReminderFragment"
+        android:label="fragment_reminder"
+        tools:layout="@layout/fragment_reminder" >
+        <action
+            android:id="@+id/action_reminderFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/archiveFragment"
+        android:name="com.example.myapplication.fragment.ArchiveFragment"
+        android:label="fragment_archive"
+        tools:layout="@layout/fragment_archive" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.myapplication.fragment.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_archiveFragment"
+            app:destination="@id/archiveFragment" />
+    </fragment>
+
+
 </navigation>
