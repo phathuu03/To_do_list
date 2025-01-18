@@ -1,6 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -21,6 +20,7 @@ class MainActivity : AppCompatActivity() {
             navController = binding.navHostFragment.findNavController()
             NavigationUI.setupWithNavController(binding.menuNav , navController)
         }
+
 
 
     }

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.myapplication.fragment.StartFragment"
+        android:name="com.example.myapplication.ui.fragment.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/chooseLanguageFragment"
-        android:name="com.example.myapplication.fragment.ChooseLanguageFragment"
+        android:name="com.example.myapplication.ui.fragment.ChooseLanguageFragment"
         android:label="fragment_choose_language"
         tools:layout="@layout/fragment_choose_language" >
 
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/introFragment"
-        android:name="com.example.myapplication.fragment.IntroFragment"
+        android:name="com.example.myapplication.ui.fragment.IntroFragment"
         android:label="fragment_intro"
         tools:layout="@layout/fragment_intro" >
         <action
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.myapplication.fragment.HomeFragment"
+        android:name="com.example.myapplication.ui.fragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
 
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/reminderFragment"
-        android:name="com.example.myapplication.fragment.ReminderFragment"
+        android:name="com.example.myapplication.ui.fragment.ReminderFragment"
         android:label="fragment_reminder"
         tools:layout="@layout/fragment_reminder" >
         <action
@@ -55,12 +55,12 @@
     </fragment>
     <fragment
         android:id="@+id/archiveFragment"
-        android:name="com.example.myapplication.fragment.ArchiveFragment"
+        android:name="com.example.myapplication.ui.fragment.ArchiveFragment"
         android:label="fragment_archive"
         tools:layout="@layout/fragment_archive" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.myapplication.fragment.SettingFragment"
+        android:name="com.example.myapplication.ui.fragment.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" >
         <action

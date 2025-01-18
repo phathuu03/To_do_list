@@ -1,21 +1,18 @@
-package com.example.myapplication.fragment
+package com.example.myapplication.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.myapplication.MainActivity
+import com.example.myapplication.ui.MainActivity
 import com.example.myapplication.R
-import com.example.myapplication.adapter.ViewPage2IntroAdapter
+import com.example.myapplication.ui.adapter.ViewPage2IntroAdapter
 import com.example.myapplication.databinding.FragmentIntroBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.relex.circleindicator.CircleIndicator3
 
 // TODO: Rename parameter arguments, choose names that match

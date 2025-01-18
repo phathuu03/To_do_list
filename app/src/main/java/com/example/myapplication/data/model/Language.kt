@@ -1,6 +1,6 @@
-package com.example.myapplication.model
+package com.example.myapplication.data.model
 
-import com.example.myapplication.enums.TypeLanguage
+import com.example.myapplication.utils.enums.TypeLanguage
 
 data class Language(
     val id : Int,

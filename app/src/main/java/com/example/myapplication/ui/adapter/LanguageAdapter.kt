@@ -1,12 +1,12 @@
-package com.example.myapplication.adapter
+package com.example.myapplication.ui.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
-import com.example.myapplication.enums.TypeLanguage
-import com.example.myapplication.model.Language
+import com.example.myapplication.utils.enums.TypeLanguage
+import com.example.myapplication.data.model.Language
 
 class LanguageAdapter(private val listener: OnItemSelectedListener) :
     RecyclerView.Adapter<LanguageAdapter.ViewHolderLanguage>() {
