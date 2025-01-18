@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F5F5F9"
     android:paddingHorizontal="16dp"
-    tools:context=".ui.fragment.SettingFragment">
+    tools:context=".fragment.SettingFragment">
 
     <TextView
         android:id="@+id/tv_title_setting"

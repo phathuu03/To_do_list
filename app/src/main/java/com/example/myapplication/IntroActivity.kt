@@ -1,16 +1,17 @@
-package com.example.myapplication.ui
+package com.example.myapplication
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.myapplication.R
+import com.example.myapplication.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
+    private val binding by lazy {
+        ActivityIntroBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
+
 
     }
 }

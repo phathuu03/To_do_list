@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.ChooseLanguageFragment">
+    tools:context=".fragment.ChooseLanguageFragment">
 
     <TextView
         android:id="@+id/tv_select_language"
@@ -34,6 +34,8 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@+id/tv_select_language"
         app:layout_constraintTop_toTopOf="@+id/tv_select_language" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="320dp"

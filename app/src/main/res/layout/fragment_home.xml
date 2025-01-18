@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="16dp"
-    tools:context=".ui.fragment.HomeFragment">
+    android:paddingHorizontal="@dimen/_16dp"
+    tools:context=".fragment.HomeFragment">
 
     <RelativeLayout
         android:id="@+id/header_title"

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.fragment
+package com.example.myapplication.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
-import com.example.myapplication.ui.adapter.LanguageAdapter
+import com.example.myapplication.adapter.LanguageAdapter
 import com.example.myapplication.databinding.FragmentChooseLanguageBinding
-import com.example.myapplication.data.model.Language
+import com.example.myapplication.model.Language
 
 
 class ChooseLanguageFragment : Fragment(), LanguageAdapter.OnItemSelectedListener {

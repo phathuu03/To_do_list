@@ -1,4 +1,4 @@
-package com.example.myapplication.ui
+package com.example.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
             navController = binding.navHostFragment.findNavController()
             NavigationUI.setupWithNavController(binding.menuNav , navController)
         }
+
 
 
 

@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item  android:id="@+id/homeFragment"
+    <item  android:id="@+id/nav_home"
         android:title="@string/txt_note"
         android:icon="@drawable/ic_note_fill"
 
         />
     <item
-        android:id="@+id/reminderFragment"
+        android:id="@+id/nav_reminder"
         android:title="@string/txt_reminder"
         android:icon="@drawable/ic_reminder"
          />
     <item
-        android:id="@+id/archiveFragment"
+        android:id="@+id/nav_archive"
         android:title="@string/txt_archive"
         android:icon="@drawable/ic_archive"
         />
     <item
-        android:id="@+id/settingFragment"
+        android:id="@+id/nav_setting"
         android:title="@string/txt_setting"
         android:icon="@drawable/ic_setting"
         />
