@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
-import com.example.myapplication.enums.TypeLanguage
+import com.example.myapplication.utils.enums.TypeLanguage
 import com.example.myapplication.model.Language
 
 class LanguageAdapter(private val listener: OnItemSelectedListener) :

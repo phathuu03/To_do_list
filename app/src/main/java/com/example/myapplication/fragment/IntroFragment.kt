@@ -1,13 +1,12 @@
 package com.example.myapplication.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -15,7 +14,6 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.ViewPage2IntroAdapter
 import com.example.myapplication.databinding.FragmentIntroBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.relex.circleindicator.CircleIndicator3
 
 // TODO: Rename parameter arguments, choose names that match
@@ -65,15 +63,9 @@ class IntroFragment : Fragment() {
                 }
 
                 2 -> {
-                    val action = IntroFragmentDirections.actionIntroFragmentToHomeFragment()
-                    navController.navigate(
-                        action, NavOptions.Builder()
-                            .setPopUpTo(R.id.introFragment, true)
-                            .setPopUpTo(R.id.chooseLanguageFragment, true)
-                            .build()
-                    )
-                    (requireActivity() as MainActivity).binding.menuNav.visibility = View.VISIBLE
-                    (requireActivity() as MainActivity).binding.btnAdd.visibility = View.VISIBLE
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
                 }
 
             }

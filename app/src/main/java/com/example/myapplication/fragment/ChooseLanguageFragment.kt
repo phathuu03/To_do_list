@@ -13,7 +13,7 @@ import com.example.myapplication.databinding.FragmentChooseLanguageBinding
 import com.example.myapplication.model.Language
 
 
-class ChooseLanguageFragment : Fragment(),LanguageAdapter.OnItemSelectedListener {
+class ChooseLanguageFragment : Fragment(), LanguageAdapter.OnItemSelectedListener {
     private lateinit var adapter: LanguageAdapter
 
 private val binding by lazy {
@@ -30,7 +30,7 @@ private val binding by lazy {
         savedInstanceState: Bundle?
     ): View {
         val recyclerView = binding.recycleViewLanguage
-        adapter =LanguageAdapter(this)
+        adapter = LanguageAdapter(this)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
