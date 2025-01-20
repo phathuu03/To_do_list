@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
-import com.example.myapplication.utils.enums.TypeLanguage
 import com.example.myapplication.model.Language
+import com.example.myapplication.utils.enums.TypeLanguage
 
 class LanguageAdapter(private val listener: OnItemSelectedListener) :
     RecyclerView.Adapter<LanguageAdapter.ViewHolderLanguage>() {
@@ -21,12 +21,14 @@ class LanguageAdapter(private val listener: OnItemSelectedListener) :
     inner class ViewHolderLanguage(private val binding: ViewHolderSelectLanguageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val rdBtn = binding.rdSelectedCountry
+        val item = binding.layoutChooseLanguage
 
         fun bind(language: Language, position: Int) {
             binding.tvSelectedCountry.text = language.language
             rdBtn.isChecked = position == selectedPosition
 
-            rdBtn.setOnClickListener {
+
+                item.setOnClickListener {
                 listener.onItemSelected(language, position)
             }
         }

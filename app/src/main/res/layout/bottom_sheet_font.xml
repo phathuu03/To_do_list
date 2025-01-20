@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/_16dp"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/font"
+        android:textSize="@dimen/_16sp"
+        android:fontFamily="@font/roboto_bold"
+        android:gravity="center"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:autofillHints=""
+        android:paddingStart="@dimen/_12dp"
+        android:background="@drawable/bg_search_font"
+        android:hint="@string/txt_search"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="@dimen/_8dp"
+        android:layout_marginTop="@dimen/_24dp"
+        tools:ignore="RtlSymmetry"
+        android:inputType="text"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_24dp"
+        tools:listitem="@layout/item_view_choose_font"
+        />
+
+
+
+
+
+
+
+
+
+</LinearLayout>
