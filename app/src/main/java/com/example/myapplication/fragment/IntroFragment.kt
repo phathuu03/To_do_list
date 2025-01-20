@@ -21,7 +21,7 @@ import me.relex.circleindicator.CircleIndicator3
 
 
 class IntroFragment : Fragment() {
-    private lateinit var viewPage: ViewPager2
+    private lateinit var viewPage2: ViewPager2
     private lateinit var indicator: CircleIndicator3
     private lateinit var navController: NavController
 
@@ -44,22 +44,22 @@ class IntroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPage = binding.viewPage2Intro
-        viewPage.adapter = ViewPage2IntroAdapter(requireActivity())
+        viewPage2 = binding.viewPage2Intro
+        viewPage2.adapter = ViewPage2IntroAdapter(requireActivity())
         indicator = binding.indicatorIntro
-        indicator.setViewPager(viewPage)
+        indicator.setViewPager(viewPage2)
         navController = findNavController()
         val btnNext = binding.btnNextIntro
 
         btnNext.setOnClickListener {
 
-            when (viewPage.currentItem) {
+            when (viewPage2.currentItem) {
                 0 -> {
-                    viewPage.currentItem = 1
+                    viewPage2.currentItem = 1
                 }
 
                 1 -> {
-                    viewPage.currentItem = 2
+                    viewPage2.currentItem = 2
                 }
 
                 2 -> {

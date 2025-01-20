@@ -1,5 +1,6 @@
 package com.example.myapplication.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,13 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.AddNoteActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.LanguageAdapter
 import com.example.myapplication.model.Language
+import com.example.myapplication.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {
-
+private val binding by lazy {
+    FragmentHomeBinding.inflate(layoutInflater)
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +28,16 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnAddSmall.setOnClickListener{
+            val intent = Intent(requireActivity(), AddNoteActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

@@ -26,4 +26,11 @@
     <string name="txt_notification">App notification</string>
     <string name="txt_content_notification">Get new updates and usage tips</string>
     <string name="txt_language">Language</string>
+    <string name="text_date">09.27.2021,</string>
+    <string name="text_time">15:06 pm</string>
+    <string name="txt_category">Category</string>
+    <string name="title">Title</string>
+    <string name="txt_lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="ac_edit_content_note">ac_edit_content_note</string>
+    <string name="text_banner_collapse">Banner collapse</string>
 </resources>
