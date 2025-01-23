@@ -86,6 +86,7 @@
                 />
 
             <ImageView
+                android:id="@+id/btn_show_category"
                 android:layout_width="@dimen/_14dp"
                 android:layout_height="@dimen/_14dp"
                 android:src="@drawable/ic_ac_more"
@@ -162,6 +163,7 @@
         android:layout_marginHorizontal="@dimen/_12dp"
         >
         <ImageButton
+            android:id="@+id/btn_choose_font"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -181,6 +183,7 @@
             />
 
         <ImageButton
+            android:id="@+id/btn_choose_attachment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

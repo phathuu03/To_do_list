@@ -1,167 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingHorizontal="@dimen/_16dp"
-    >
-<RelativeLayout
-    android:id="@+id/layout_title"
-    android:layout_width="match_parent"
-    android:layout_height="24dp"
-    app:layout_constraintVertical_bias="0.7"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/layout_tool_choose_language"
-    >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:textSize="@dimen/_16sp"
-        android:text="@string/font"
-        android:layout_centerInParent="true"
-        tools:ignore="RelativeOverlap" />
-
-    <ImageView
-        android:layout_width="@dimen/_24dp"
-        android:layout_height="@dimen/_24dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_x"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        />
-
-    <ImageView
-        android:layout_width="@dimen/_24dp"
-        android:layout_height="@dimen/_24dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_v"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-
-        />
-
-</RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_tool_choose_language"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_16dp">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/btn_select_font"
-        app:layout_constraintTop_toBottomOf="@+id/layout_title"
-        app:layout_constraintVertical_bias="0.9"
-        tools:layout_editor_absoluteX="16dp">
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            tools:ignore="RelativeOverlap">
-
-            <ImageView
-                android:layout_width="@dimen/_24dp"
-                android:layout_height="@dimen/_24dp"
-                android:background="@drawable/ic_font_t"
-                android:contentDescription="@string/app_name" />
+        <RelativeLayout
+            android:id="@+id/layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/_16dp"
+           >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_16dp"
-                android:text="@string/txt_sise_default"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/font"
+                android:textSize="@dimen/_16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageButton
+                android:id="@+id/btn_close_bottom_sheet"
+                android:layout_width="@dimen/_24dp"
+                android:layout_height="@dimen/_24dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:background="@drawable/ic_x"
+                 />
+
+            <ImageButton
+                android:id="@+id/btn_set_font"
+                android:layout_width="@dimen/_24dp"
+                android:layout_height="@dimen/_24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:background="@drawable/ic_v_font"
 
                 />
 
-            <ImageView
-                android:layout_width="@dimen/_24dp"
-                android:layout_height="@dimen/_24dp"
-                android:background="@drawable/ic_ac_more_font"
-                android:contentDescription="@string/app_name" />
+        </RelativeLayout>
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/layout_tool_choose_language"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:gravity="center">
+            android:layout_marginVertical="32dp">
 
-            <ImageView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                tools:ignore="RelativeOverlap">
+
+                <ImageView
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:background="@drawable/ic_font_t"
+                    android:contentDescription="@string/app_name" />
+
+
+
+               <Spinner
+                   android:id="@+id/spinner"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                   />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/btn_set_font_bold"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:layout_marginEnd="@dimen/_12dp"
+                    android:background="@drawable/ic_boken"
+                    android:contentDescription="@string/todo"
+                    android:backgroundTint="@color/black"
+                    />
+
+
+                <ImageButton
+                    android:id="@+id/btn_set_font_italic"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:layout_marginEnd="@dimen/_12dp"
+                    android:background="@drawable/ic_i"
+                    android:contentDescription="@string/todo"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_set_font_underscore"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:layout_marginEnd="@dimen/_12dp"
+                    android:background="@drawable/ic_u"
+                    android:contentDescription="@string/todo"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_set_font_sample"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:background="@drawable/ic_aa"
+                    android:contentDescription="@string/todo"
+
+                    />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_select_font"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+
+            android:background="@drawable/bg_choose_font"
+            android:paddingHorizontal="@dimen/_12dp">
+
+            <TextView
+                android:id="@+id/tv_name_font"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/txt_default_font" />
+
+            <ImageButton
                 android:layout_width="@dimen/_24dp"
                 android:layout_height="@dimen/_24dp"
-                android:layout_marginEnd="@dimen/_12dp"
-                android:background="@drawable/ic_boken"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_next_font"
                 android:contentDescription="@string/todo" />
 
-            <ImageView
-                android:layout_width="@dimen/_24dp"
-                android:layout_height="@dimen/_24dp"
-                android:layout_marginEnd="@dimen/_12dp"
-                android:background="@drawable/ic_i"
-                android:contentDescription="@string/todo"
 
-                />
-
-            <ImageView
-                android:layout_width="@dimen/_24dp"
-                android:layout_height="@dimen/_24dp"
-                android:layout_marginEnd="@dimen/_12dp"
-                android:background="@drawable/ic_u"
-                android:contentDescription="@string/todo"
-
-                />
-
-            <ImageView
-                android:layout_width="@dimen/_24dp"
-                android:layout_height="@dimen/_24dp"
-                android:background="@drawable/ic_aa"
-                android:contentDescription="@string/todo" />
-
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-    android:id="@+id/btn_select_font"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:paddingHorizontal="@dimen/_12dp"
-    android:background="@drawable/bg_choose_font"
-    >
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_centerVertical="true"
-        android:text="@string/txt_default_font"/>
-
-    <ImageView
-        android:layout_width="@dimen/_24dp"
-        android:layout_height="@dimen/_24dp"
-        android:background="@drawable/ic_next_font"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/todo" />
+        </RelativeLayout>
+    </LinearLayout>
 
 
 
 
-</RelativeLayout>
-
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

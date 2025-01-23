@@ -5,25 +5,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
-import com.example.myapplication.model.Language
-import com.example.myapplication.utils.enums.TypeLanguage
+import com.example.myapplication.model.LanguageApplication
+import com.example.myapplication.utils.Utils.languages
 
 class LanguageAdapter(private val listener: OnItemSelectedListener) :
     RecyclerView.Adapter<LanguageAdapter.ViewHolderLanguage>() {
     private var selectedPosition = 0
 
-    val languages = listOf(
-        Language(1, "", TypeLanguage.EN,"English"),
-        Language(2, "", TypeLanguage.VN,"Việt nam"),
-        Language(3, "", TypeLanguage.KO,"Korea")
-    )
+
 
     inner class ViewHolderLanguage(private val binding: ViewHolderSelectLanguageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val rdBtn = binding.rdSelectedCountry
         val item = binding.layoutChooseLanguage
 
-        fun bind(language: Language, position: Int) {
+        @SuppressLint("SuspiciousIndentation")
+        fun bind(language: LanguageApplication, position: Int) {
             binding.tvSelectedCountry.text = language.language
             rdBtn.isChecked = position == selectedPosition
 
@@ -36,7 +33,7 @@ class LanguageAdapter(private val listener: OnItemSelectedListener) :
     }
 
     interface OnItemSelectedListener {
-        fun onItemSelected(language: Language, position: Int)  // Định nghĩa sự kiện item được chọn
+        fun onItemSelected(language: LanguageApplication, position: Int)  // Định nghĩa sự kiện item được chọn
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderLanguage {

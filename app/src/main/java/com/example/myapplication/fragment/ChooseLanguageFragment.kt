@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.adapter.LanguageAdapter
 import com.example.myapplication.databinding.FragmentChooseLanguageBinding
-import com.example.myapplication.model.Language
+import com.example.myapplication.model.LanguageApplication
 
 
 class ChooseLanguageFragment : Fragment(), LanguageAdapter.OnItemSelectedListener {
@@ -49,7 +49,7 @@ private val binding by lazy {
 
     }
 
-    override fun onItemSelected(item: Language, position: Int) {
+    override fun onItemSelected(item: LanguageApplication, position: Int) {
         adapter.updateSelection( position)
     }
 
