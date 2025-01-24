@@ -15,12 +15,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.databinding.BottomSheetChooseFontBinding
+import com.example.myapplication.listener.PasserFontNote
 import com.example.myapplication.model.Font
+import com.example.myapplication.model.FontNote
 import com.example.myapplication.viewmodel.NoteFontViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class ChooseFontBottomSheet : BottomSheetDialogFragment(), ChooseFontBottomFragment.OnClickFont {
+class ChooseFontBottomSheet(val passerFontNote: PasserFontNote) : BottomSheetDialogFragment(), ChooseFontBottomFragment.OnClickFont {
 
     private var fontSelected: Font? = null
     private lateinit var tvNameFont: TextView
@@ -31,52 +33,115 @@ class ChooseFontBottomSheet : BottomSheetDialogFragment(), ChooseFontBottomFragm
     private lateinit var btnSetItalic: ImageButton
     private lateinit var btnSetUnderscore: ImageButton
     private lateinit var btnSetFontSample: ImageButton
-    private lateinit var btnDone: ImageButton
     private var colorToolSelected: Int = 0
     private var colorToolNonSelected: Int = 0
+    private lateinit var btnSetFont: ImageButton
+
+    private var fontNote: FontNote? = null
 
 
     private val binding by lazy {
         BottomSheetChooseFontBinding.inflate(layoutInflater)
     }
 
-    fun getInstance(): ChooseFontBottomSheet {
-        val chooseFontBottomSheet = ChooseFontBottomSheet()
-        return chooseFontBottomSheet
-    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+
         initViewDefault()
         initViewSpinner()
         clickItemToolSetStyle()
 
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnSelectFont.setOnClickListener {
+            val bottomSheetChooseFont = ChooseFontBottomFragment(this)
+            bottomSheetChooseFont.show(
+                requireActivity().supportFragmentManager,
+                bottomSheetChooseFont.tag
+            )
+        }
+
+        binding.btnCloseBottomSheet.setOnClickListener {
+            passerFontNote.passerFontNote(null)
+            dismiss()
+        }
+
+        btnSetFont.setOnClickListener {
+
+            viewModel.font.observe(requireActivity()){
+                passerFontNote.passerFontNote(it)
+            }
+
+            dismiss()
+        }
+
+
+        val bottomSheet = view.parent as View
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+
+        isCancelable = false
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                TODO("Not yet implemented")
+            }
+
+        })
 
     }
 
+
+
+
     private fun clickItemToolSetStyle() {
-        btnSetBold.setOnClickListener {
-            viewModel.setBold()
-        }
-        btnSetItalic.setOnClickListener {
-            viewModel.setItalic()
-        }
-        btnSetUnderscore.setOnClickListener {
-            viewModel.setUnderscoreL()
+        viewModel.font.observe(this) { font ->
+            btnSetBold.setOnClickListener {
+                viewModel.setBold(!font.isBold)
+            }
+            btnSetItalic.setOnClickListener {
+                viewModel.setItalic(!font.isItalic)
+            }
+            btnSetUnderscore.setOnClickListener {
+                viewModel.setUnderscoreL(!font.isUnderscoreL)
+
+            }
+
+            btnSetFontSample.setOnClickListener {
+                viewModel.setFontSample(!font.isFontSample)
+            }
+
         }
 
-        btnSetFontSample.setOnClickListener {
-            viewModel.setFontSample()
-        }
+
     }
 
 
     private fun initViewSpinner() {
-
-
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, fontSizes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -103,8 +168,6 @@ class ChooseFontBottomSheet : BottomSheetDialogFragment(), ChooseFontBottomFragm
 
     }
 
-    private fun initViewByViewModel() {
-    }
 
     @SuppressLint("SetTextI18n")
     private fun initViewDefault() {
@@ -113,7 +176,8 @@ class ChooseFontBottomSheet : BottomSheetDialogFragment(), ChooseFontBottomFragm
         viewModel.font.observe(this) { fontNote ->
 
             tvNameFont.text = fontNote.pathFont.nameFont
-            val defaultPosition = fontSizes.indexOf(fontNote.fontSize.toInt())
+
+            val defaultPosition = fontSizes.indexOf(fontNote.fontSize)
             spinner.setSelection(defaultPosition)
 
             if (fontNote.isBold) {
@@ -168,53 +232,11 @@ class ChooseFontBottomSheet : BottomSheetDialogFragment(), ChooseFontBottomFragm
         btnSetUnderscore = binding.btnSetFontUnderscore
         btnSetItalic = binding.btnSetFontItalic
         btnSetFontSample = binding.btnSetFontSample
-        btnDone = binding.btnSetFont
+        btnSetFont = binding.btnSetFont
 
 
     }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.btnSelectFont.setOnClickListener {
-            val bottomSheetChooseFont = ChooseFontBottomFragment(this)
-            bottomSheetChooseFont.show(
-                requireActivity().supportFragmentManager,
-                bottomSheetChooseFont.tag
-            )
-        }
-
-        binding.btnCloseBottomSheet.setOnClickListener {
-            dismiss()
-
-        }
-
-
-        val bottomSheet = view.parent as View
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-
-        isCancelable = false
-        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-    }
 
     override fun sendFont(font: Font) {
 

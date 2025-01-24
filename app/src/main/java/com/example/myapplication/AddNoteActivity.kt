@@ -14,13 +14,17 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.bottomsheet.ChooseAttachmentBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseCategoryBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseFontBottomSheet
 import com.example.myapplication.databinding.ActivityAddNoteBinding
+import com.example.myapplication.listener.PasserFontNote
+import com.example.myapplication.model.FontNote
+import com.example.myapplication.viewmodel.NoteFontViewModel
 
 
-class AddNoteActivity : AppCompatActivity() {
+class AddNoteActivity : AppCompatActivity(), PasserFontNote {
     private lateinit var toolbar: Toolbar
     private lateinit var btnChooseFont: ImageButton
     private lateinit var btnChooseAttachment: ImageButton
@@ -30,39 +34,52 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var btnShowCategory: ImageView
     private lateinit var editTitle: EditText
     private lateinit var editContent: EditText
+    private var fontNote: FontNote? = null
 
 
     private val binding by lazy {
         ActivityAddNoteBinding.inflate(layoutInflater)
     }
 
+    private fun setUpViewModelFont() {
+        val viewModel = ViewModelProvider(this)[NoteFontViewModel::class.java]
+
+        if (fontNote == null) {
+            viewModel.setFontDefault()
+        } else {
+            viewModel.setFontCustom(this.fontNote!!)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setUpToolBar()
+        setUpViewModelFont()
         initView()
+
+
         tvDate.setOnClickListener {
             customerEditContentText()
         }
         val typeface = resources.getFont(R.font.roboto_medium)
         tvTime.typeface = typeface
-
-
-
-
         btnChooseFont.setOnClickListener {
             clickOpenFragmentChooseFont()
         }
-
         btnChooseAttachment.setOnClickListener {
             openChooseAttachment()
         }
         btnChooseCategory.setOnClickListener {
             openChooseCategoryFragment()
         }
-
-
     }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+
 
 
     private fun customerEditContentText() {
@@ -70,6 +87,7 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun insertImage() {
         val spannable = SpannableStringBuilder(editContent.text)
@@ -83,7 +101,7 @@ class AddNoteActivity : AppCompatActivity() {
         val start = editContent.selectionStart
         spannable.insert(start, " "); // Thêm khoảng trắng tại vị trí con trỏ
 
-        spannable.setSpan(imageSpan, start , start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(imageSpan, start, start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         editContent.text = spannable
 
@@ -96,11 +114,6 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-
-    }
 
     private fun openChooseCategoryFragment() {
         val bottomSheetChooseCategoryBottomSheetFragment = ChooseCategoryBottomSheetFragment()
@@ -128,7 +141,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     private fun clickOpenFragmentChooseFont() {
-        val bottomSheetFragment = ChooseFontBottomSheet().getInstance()
+        val bottomSheetFragment = ChooseFontBottomSheet(this)
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
@@ -156,6 +169,11 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_note_menu, menu)
         return true
+    }
+
+    override fun passerFontNote(fontNote: FontNote?) {
+        this.fontNote = fontNote
+        setUpViewModelFont()
     }
 
 
