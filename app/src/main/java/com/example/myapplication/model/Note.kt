@@ -25,8 +25,9 @@ data class Note(
 
     val audioRecords: List<AudioRecord>?,
 
+    val isFavorite : Boolean = false,
 
-    val isFavorite : Boolean = false
+    val tasks: List<Task>?
 
     ){
     companion object {

@@ -174,13 +174,13 @@
             />
 
         <ImageButton
+            android:id="@+id/btn_insert_check_box"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="@string/ac_edit_content_note"
-            android:src="@drawable/ic_tick_square"
             android:backgroundTint="@color/transparent"
-            />
+            android:contentDescription="@string/ac_edit_content_note"
+            android:src="@drawable/ic_tick_square" />
 
         <ImageButton
             android:id="@+id/btn_choose_attachment"

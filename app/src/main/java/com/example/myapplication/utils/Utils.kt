@@ -5,9 +5,13 @@ import com.example.myapplication.model.Font
 import com.example.myapplication.model.FontNote
 import com.example.myapplication.model.LanguageApplication
 import com.example.myapplication.utils.enums.TypeLanguage
+import java.time.LocalDate
+import java.time.LocalTime
 
 object Utils {
-    private val pathFont = Font(nameFont = "Medium", resId = R.font.roboto_medium)
+     var pathFont = Font(nameFont = "Medium", resId = R.font.roboto_regular)
+    private val currentTime = LocalTime.now()
+    private val currentDate = LocalDate.now()
     val defaultFont: FontNote = FontNote(pathFont = pathFont , fontSize = 14)
 
     val fonts = mutableListOf<Font>() .apply {
@@ -21,6 +25,8 @@ object Utils {
         LanguageApplication(2, "", TypeLanguage.VN,"Việt nam"),
         LanguageApplication(3, "", TypeLanguage.KO,"Korea")
     )
+
+
 
 
 

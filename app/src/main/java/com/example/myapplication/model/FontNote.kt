@@ -1,10 +1,12 @@
 package com.example.myapplication.model
 
+import com.example.myapplication.utils.Utils
+
 data class FontNote(
 
     val idFont: Int = generateId(),
 
-    var pathFont: Font,
+    var pathFont: Font = Utils.pathFont,
 
     var fontSize: Int = 14,
 

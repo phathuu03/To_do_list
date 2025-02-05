@@ -5,7 +5,7 @@ data class Font(
 
     val nameFont : String,
 
-    val resId: Int?,
+    val resId: Int,
 
     var isSelected : Boolean = false
 

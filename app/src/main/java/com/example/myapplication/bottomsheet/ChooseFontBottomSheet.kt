@@ -12,21 +12,18 @@ import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.databinding.BottomSheetChooseFontBinding
-import com.example.myapplication.listener.PasserFontNote
 import com.example.myapplication.model.Font
 import com.example.myapplication.model.FontNote
 import com.example.myapplication.viewmodel.NoteFontViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class ChooseFontBottomSheet(val passerFontNote: PasserFontNote) : BottomSheetDialogFragment(), ChooseFontBottomFragment.OnClickFont {
+class ChooseFontBottomSheet(private val viewModel: NoteFontViewModel) : BottomSheetDialogFragment(), ChooseFontBottomFragment.OnClickFont {
 
     private var fontSelected: Font? = null
     private lateinit var tvNameFont: TextView
-    private lateinit var viewModel: NoteFontViewModel
     private lateinit var spinner: Spinner
     private lateinit var fontSizes: List<Int>
     private lateinit var btnSetBold: ImageButton
@@ -84,14 +81,14 @@ class ChooseFontBottomSheet(val passerFontNote: PasserFontNote) : BottomSheetDia
         }
 
         binding.btnCloseBottomSheet.setOnClickListener {
-            passerFontNote.passerFontNote(null)
+            viewModel.setFontDefault()
             dismiss()
         }
 
         btnSetFont.setOnClickListener {
 
             viewModel.font.observe(requireActivity()){
-                passerFontNote.passerFontNote(it)
+
             }
 
             dismiss()
@@ -220,7 +217,6 @@ class ChooseFontBottomSheet(val passerFontNote: PasserFontNote) : BottomSheetDia
             me.relex.circleindicator.R.color.design_default_color_primary
         )
         colorToolNonSelected = ContextCompat.getColor(requireContext(), R.color.black)
-        viewModel = ViewModelProvider(this)[NoteFontViewModel::class.java]
         tvNameFont = binding.tvNameFont
         spinner = binding.spinner
         fontSizes = mutableListOf<Int>().apply {
