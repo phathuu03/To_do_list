@@ -1,11 +1,10 @@
 package com.example.myapplication.model
 
-import android.text.SpannableStringBuilder
 import com.example.myapplication.utils.Utils
 import java.time.LocalDateTime
 
 data class Note(
-    val idNote: Int = generateId(),
+    val idNote: Int = 0,
 
     val dateStart: LocalDateTime,
 
@@ -15,7 +14,7 @@ data class Note(
 
     val category: CategoryNote?,
 
-    val content: SpannableStringBuilder,
+    val content: String,
 
     val font: FontNote = Utils.defaultFont,
 
@@ -27,14 +26,11 @@ data class Note(
 
     val isFavorite : Boolean = false,
 
-    val tasks: List<Task>?
+    val tasks: List<Task>? ,
 
-    ){
-    companion object {
-        private var currentId = 0
+    val timeUpdate: LocalDateTime?
 
-        private fun generateId(): Int {
-            return ++currentId
-        }
-    }
-}
+
+
+    )
+

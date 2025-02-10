@@ -16,4 +16,8 @@ class CategoryViewModel : ViewModel() {
         _listCategory.value  = categoryNoteList
     }
 
+    fun addCategory(categoryNote: CategoryNote) {
+        val currentList = _listCategory.value ?: emptyList()
+        _listCategory.value = currentList + categoryNote
+    }
 }

@@ -73,7 +73,7 @@ class ChooseCategoryBottomSheetFragment(private val viewModel: CategoryViewModel
             val enteredText = input.text.toString()
             categoryNotes.add(CategoryNote(nameCategory = enteredText))
 
-            viewModel.insertCategory(categoryNotes)
+            viewModel.addCategory(CategoryNote(nameCategory = enteredText))
         }
         builder.show()
     }

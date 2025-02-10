@@ -1,0 +1,119 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_16dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:orientation="vertical"
+      >
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24dp"
+            >
+
+            <ImageButton
+                android:id="@+id/btn_close_bottom_sheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/ic_x" />
+
+            <ImageButton
+                android:id="@+id/save_bitmap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/ic_v" />
+        </RelativeLayout>
+
+
+        <com.example.myapplication.canvas.GraphicView
+            android:id="@+id/canvas"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:background="@android:color/white"
+            android:layout_marginTop="@dimen/_24dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_24dp"
+            >
+            <ImageView
+                android:id="@+id/image_test"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:id="@+id/btn_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear"
+                android:backgroundTint="@color/black"
+                android:layout_marginEnd="@dimen/_24dp"
+                android:textColor="@color/white"
+                />
+
+            <ImageButton
+                android:id="@+id/btn_set_path_color_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_8dp"
+                android:background="@drawable/bg_chosse_color_bursh"
+                android:backgroundTint="@color/black"
+                android:text="Clear Drawing" />
+
+            <ImageButton
+                android:id="@+id/btn_set_path_color_red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_8dp"
+                android:background="@drawable/bg_chosse_color_bursh"
+                android:backgroundTint="@color/red"
+                android:text="Clear Drawing" />
+
+            <ImageButton
+                android:id="@+id/btn_set_path_color_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_8dp"
+                android:background="@drawable/bg_chosse_color_bursh"
+                android:backgroundTint="@color/gray"
+                android:text="Clear Drawing" />
+
+            <ImageButton
+                android:id="@+id/btn_set_path_color_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_8dp"
+                android:background="@drawable/bg_chosse_color_bursh"
+                android:backgroundTint="@color/blue"
+                android:text="Clear Drawing" />
+
+            <ImageButton
+                android:id="@+id/btn_set_path_color_variant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_chosse_color_bursh"
+                android:backgroundTint="#4F378B"
+                android:text="Clear Drawing" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
