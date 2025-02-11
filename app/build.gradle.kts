@@ -54,4 +54,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:$nav_version")
     implementation ("me.relex:circleindicator:2.1.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
+    // import ted libs
+    implementation("io.github.ParkSangGwon:tedpermission-normal:3.4.2")
+
+
+    implementation ("com.google.android.exoplayer:exoplayer:2.15.0")
+
+
 }

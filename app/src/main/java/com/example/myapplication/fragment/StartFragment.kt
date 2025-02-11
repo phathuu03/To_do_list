@@ -37,7 +37,7 @@ class StartFragment : Fragment() {
         val controller = findNavController()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            delay(3000)
+            delay(1000)
             val action = StartFragmentDirections.actionStartFragmentToChooseLanguageFragment()
             controller.navigate(action, NavOptions.Builder()
                 .setPopUpTo(R.id.startFragment, true)

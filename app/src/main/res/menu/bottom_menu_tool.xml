@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ac_choose_font"
+        android:icon="@drawable/ic_font"
+        android:title="@string/font"
+        />
+
+    <item
+        android:id="@+id/ac_add_to_do_list"
+        android:icon="@drawable/ic_tick_square"
+        android:title="1"
+        />
+
+    <item
+        android:id="@+id/ac_choose_bg"
+        android:icon="@drawable/ic_add"
+        android:title="2"
+        />
+
+    <item
+        android:id="@+id/ac_add_emoji"
+        android:icon="@drawable/ic_add_icon"
+        android:title="22"
+        />
+    <item
+        android:id="@+id/ac_add_voice"
+        android:icon="@drawable/ic_add_voice"
+        android:title="3"
+        />
+
+
+
+</menu>

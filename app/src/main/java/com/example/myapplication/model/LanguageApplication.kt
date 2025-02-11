@@ -2,7 +2,7 @@ package com.example.myapplication.model
 
 import com.example.myapplication.utils.enums.TypeLanguage
 
-data class Language(
+data class LanguageApplication(
     val id : Int,
     val flag: String,
     val typeLanguage : TypeLanguage,

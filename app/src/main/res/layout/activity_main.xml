@@ -16,7 +16,9 @@
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/menu_nav"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_graph" />
+        app:navGraph="@navigation/nav_graph"
+
+        />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
