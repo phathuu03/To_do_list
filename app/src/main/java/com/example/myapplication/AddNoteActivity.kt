@@ -4,12 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ImageSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -24,8 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.adapter.NoteAdapter
 import com.example.myapplication.bottomsheet.BrushCanvasBottomSheet
 import com.example.myapplication.bottomsheet.ChooseAttachmentBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseCategoryBottomSheetFragment
@@ -37,7 +31,6 @@ import com.example.myapplication.listener.PasserEmoji
 import com.example.myapplication.model.AttachmentNote
 import com.example.myapplication.model.CategoryNote
 import com.example.myapplication.model.FontNote
-import com.example.myapplication.model.NoteItem
 import com.example.myapplication.model.Task
 import com.example.myapplication.viewmodel.AttachmentNoteViewModel
 import com.example.myapplication.viewmodel.CanvasViewModel
@@ -97,7 +90,6 @@ class AddNoteActivity : AppCompatActivity() {
         setDateTime()
         changeFontNote()
         defaultCategories()
-        setUpRecyclerView()
         attachmentNoteViewModel.attachmentNotes.observe(this) {
             Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
         }
@@ -116,10 +108,10 @@ class AddNoteActivity : AppCompatActivity() {
             insertCheckBox()
         }
         binding.btnChooseAttachment.setOnClickListener {
-            openChooseAttachBottomSheet()
+            checkPermissionRecorderAttachment()
         }
         btnAddRecorder.setOnClickListener {
-            checkPermission()
+            checkPermissionRecorder()
         }
         binding.btnAddBrush.setOnClickListener {
             openCanvas()
@@ -131,29 +123,26 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
-    private fun setUpRecyclerView() {
-        val recyclerView = binding.recyclerViewAddNote
-        recyclerView.layoutManager = LinearLayoutManager(this)
+    private fun checkPermissionRecorderAttachment() {
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                openChooseAttachBottomSheet()
 
-        // Khởi tạo adapter 1 lần duy nhất
-        val adapter = NoteAdapter(mutableListOf())
-        recyclerView.adapter = adapter
-
-        // Lắng nghe dữ liệu từ ViewModel
-        canvasViewModel.canvas.observe(this) { canvasList ->
-            if (canvasList.isNotEmpty()) {
-                val data = mutableListOf<NoteItem>()
-
-                // Thêm dữ liệu từ ViewModel vào danh sách
-                canvasList.forEach { canvas ->
-                    data.add(NoteItem.CanvasItem(canvas))
-                }
-
-                // Cập nhật dữ liệu trong adapter mà không tạo adapter mới
-                adapter.updateData(data)
             }
+
+            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+
+            }
+
+
         }
+
+        TedPermission.create().setPermissionListener(permissionListener)
+            .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+            .setPermissions(Manifest.permission.CAMERA).check();
+
     }
+
 
 
     private fun openChooseEmoji() {
@@ -223,61 +212,6 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
-    private fun insertImageInEditText(uriImage: Uri) {
-        var cursorPosition = editContent.selectionStart
-
-        // 🔹 Nếu `EditText` trống, chèn khoảng trắng trước
-        if (editContent.text.isEmpty()) {
-            editContent.setText(" ") // Để có ít nhất một ký tự, tránh lỗi IndexOutOfBounds
-            cursorPosition = 1 // Đặt con trỏ sau ký tự đầu tiên
-        }
-
-        // 🔹 Đảm bảo con trỏ không vượt quá độ dài văn bản
-        if (cursorPosition < 0 || cursorPosition > editContent.text.length) {
-            cursorPosition = editContent.text.length
-        }
-
-        val drawable: Drawable? = try {
-            contentResolver.openInputStream(uriImage)?.use {
-                Drawable.createFromStream(it, uriImage.toString())
-            }
-        } catch (e: Exception) {
-            null
-        }
-
-        if (drawable != null) {
-            val maxWidth = (editContent.width * 0.9).toInt() // 90% chiều rộng EditText
-            val aspectRatio = drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
-            val newHeight = (maxWidth / aspectRatio).toInt()
-
-            drawable.setBounds(0, 0, maxWidth, newHeight)
-
-            val imageSpan = ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM) // Căn giữa ảnh
-
-            val editableText = editContent.editableText
-
-            // 🔹 Chèn ảnh an toàn (chèn khoảng trắng nếu cần)
-            if (cursorPosition + 1 > editableText.length) {
-                editableText.insert(
-                    cursorPosition,
-                    " \n"
-                ) // Thêm khoảng trắng để không vượt quá độ dài
-            }
-
-            editableText.setSpan(
-                imageSpan,
-                cursorPosition,
-                cursorPosition + 1,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-
-            // 🔹 Đảm bảo có khoảng trắng phía dưới ảnh để tách biệt với văn bản
-            editableText.insert(cursorPosition + 1, "\n")
-
-            // 🔹 Cập nhật con trỏ
-            editContent.setSelection(cursorPosition + 2)
-        }
-    }
 
 
     private fun openChooseAttachBottomSheet() {
@@ -387,7 +321,7 @@ class AddNoteActivity : AppCompatActivity() {
         return true
     }
 
-    private fun checkPermission() {
+    private fun checkPermissionRecorder() {
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
                 openAddRecorderBottomSheet()

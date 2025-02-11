@@ -14,6 +14,7 @@ object Utils {
     private val currentDate = LocalDate.now()
     val defaultFont: FontNote = FontNote(pathFont = pathFont , fontSize = 14)
 
+
     val fonts = mutableListOf<Font>() .apply {
         add(Font(nameFont = "Bold" , resId = R.font.roboto_bold))
         add(Font(nameFont = "Medium" , resId = R.font.roboto_medium))
@@ -25,6 +26,14 @@ object Utils {
         LanguageApplication(2, "", TypeLanguage.VN,"Việt nam"),
         LanguageApplication(3, "", TypeLanguage.KO,"Korea")
     )
+
+    val emojiList = listOf(
+        (0x1F600..0x1F64F),  // Mặt cười
+        (0x1F400..0x1F4FF),  // Động vật & thiên nhiên
+        (0x1F300..0x1F5FF),  // Biểu tượng & đồ vật
+        (0x1F1E6..0x1F1FF)   // Cờ quốc gia
+    ).flatten().map { Character.toChars(it).concatToString() }
+
 
 
 

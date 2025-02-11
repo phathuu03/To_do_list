@@ -27,6 +27,15 @@ class NoteAdapter(private val noteItems : MutableList<NoteItem>) :
         noteItems.addAll(newData)
         notifyDataSetChanged() // Cập nhật RecyclerView
     }
+    fun removeItem(position: Int) {
+        if (position >= 0 && position < noteItems.size) {
+            noteItems.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+
+
+    }
     override fun getItemViewType(position: Int): Int {
         return when(noteItems[position]){
             is NoteItem.AttachmentItem -> TYPE_ATTACHMENT

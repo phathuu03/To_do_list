@@ -1,6 +1,5 @@
 package com.example.myapplication.bottomsheet
 
-import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,11 +12,7 @@ import com.example.myapplication.model.AttachmentNote
 import com.example.myapplication.utils.enums.MediaType
 import com.example.myapplication.viewmodel.AttachmentNoteViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
 
-private var isPermissionImage = false
-private var isPermissionVideo = false
 
 class ChooseAttachmentBottomSheetFragment(private val viewModel: AttachmentNoteViewModel)  : BottomSheetDialogFragment() {
 
@@ -39,10 +34,9 @@ class ChooseAttachmentBottomSheetFragment(private val viewModel: AttachmentNoteV
         super.onViewCreated(view, savedInstanceState)
 
         binding.layoutChooseImage.setOnClickListener {
-            checkAndRequestPermission()
-            if(isPermissionImage){
+
                 openImagePicker()
-            }
+
         }
         binding.layoutChooseVideo.setOnClickListener {
             openVideoPicker()
@@ -51,24 +45,7 @@ class ChooseAttachmentBottomSheetFragment(private val viewModel: AttachmentNoteV
 
     }
 
-    private fun checkAndRequestPermission() {
-            val permissionListener = object :PermissionListener{
-                override fun onPermissionGranted() {
-                    isPermissionImage = true
-                }
 
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                    isPermissionImage = false
-                }
-
-
-            }
-        TedPermission.create()
-            .setPermissionListener(permissionListener)
-            .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-            .setPermissions(Manifest.permission.CAMERA)
-            .check();
-    }
 
 
     private fun openImagePicker() {
