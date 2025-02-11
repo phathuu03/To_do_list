@@ -9,17 +9,19 @@ import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.adapter.TaskAdapter
 import com.example.myapplication.bottomsheet.BrushCanvasBottomSheet
 import com.example.myapplication.bottomsheet.ChooseAttachmentBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseCategoryBottomSheetFragment
@@ -27,6 +29,7 @@ import com.example.myapplication.bottomsheet.ChooseEmojiBottomSheet
 import com.example.myapplication.bottomsheet.ChooseFontBottomSheet
 import com.example.myapplication.bottomsheet.RecorderBottomSheetFragment
 import com.example.myapplication.databinding.ActivityAddNoteBinding
+import com.example.myapplication.listener.DelTask
 import com.example.myapplication.listener.PasserEmoji
 import com.example.myapplication.model.AttachmentNote
 import com.example.myapplication.model.CategoryNote
@@ -62,9 +65,9 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var canvasViewModel: CanvasViewModel
 
     private lateinit var spannable: SpannableStringBuilder
-    private val tasks: MutableList<Task>? = null
+    private val tasks  = mutableListOf<Task>()
     private val listCategory = mutableListOf<CategoryNote>()
-
+    private var isTask = false
 
     private val binding by lazy {
         ActivityAddNoteBinding.inflate(layoutInflater)
@@ -186,28 +189,53 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
+private fun addTask(){
+    if(binding.editTextTask.text.toString().isNotBlank()){
+        val nameTask = binding.editTextTask.text.toString()
+        val isChecked = binding.btnInsertCheckBox.isSelected
+        tasks.add(Task( nameTask= nameTask , isChecked =  isChecked))
+        tasks.add(Task( nameTask= nameTask , isChecked =  isChecked))
+        tasks.add(Task( nameTask= nameTask , isChecked =  isChecked))
+        tasks.add(Task( nameTask= nameTask , isChecked =  isChecked))
+        tasks.add(Task( nameTask= nameTask , isChecked =  isChecked))
+        tasks.add(Task( nameTask= nameTask , isChecked =  isChecked))
+    }
+}
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun insertCheckBox() {
-        val uncheckedBox = "\u2610" // ☐
-//        val checkedBox = "\u2611" // ☑
 
-        var nameTask = ""
-        tasks?.add(Task(nameTask = "Task "))
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.enter_task_name))
+        if(!isTask){
 
-        val input = EditText(this)
-        builder.setView(input)
-        builder.setPositiveButton("OK") { dialog, which ->
-            val enteredText = input.text.toString()  // Lấy văn bản người dùng nhập
-            // Bạn có thể sử dụng `enteredText` ở đây
-            editContent.append("\n$uncheckedBox  $enteredText \n")
-            tasks?.add(Task(nameTask = enteredText))
+            binding.layoutTask.visibility = View.VISIBLE
+            val recyclerViewTask = binding.recyclerViewTask
+            recyclerViewTask.layoutManager  = LinearLayoutManager(this)
+            val adapter = TaskAdapter(tasks , object : DelTask{
+                override fun delTask(task: Task) {
+                    tasks.remove(task)
+                }
+            })
+            recyclerViewTask.adapter = adapter
+            binding.btnSaveTask.setOnClickListener {
+                addTask()
+            }
 
 
+
+
+
+
+
+
+
+            isTask = false
+        }else{
+            binding.layoutTask.visibility = View.GONE
+            isTask = true
         }
-        builder.show()
+
+
+
 
 
     }

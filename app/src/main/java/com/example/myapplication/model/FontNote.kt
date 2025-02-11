@@ -1,5 +1,6 @@
 package com.example.myapplication.model
 
+import android.graphics.Color
 import com.example.myapplication.utils.Utils
 
 data class FontNote(
@@ -16,7 +17,9 @@ data class FontNote(
 
     var isUnderscoreL: Boolean= false,
 
-    var isFontSample: Boolean= false
+    var isFontSample: Boolean= false,
+
+    var color : Int = Color.BLACK
 
 
 ){

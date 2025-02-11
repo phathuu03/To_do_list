@@ -52,4 +52,7 @@
     <string name="clear">clear</string>
     <string name="emoji">Emoji</string>
     <string name="play_audio">Play Audio</string>
+    <string name="enter_task_here">enter task here</string>
+    <string name="task">task</string>
+    <string name="image_by_user">image by user</string>
 </resources>

@@ -13,163 +13,235 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-
-    <RelativeLayout
-        android:id="@+id/layout_date_time_category"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_tool"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_add"
-        android:paddingHorizontal="@dimen/_12dp"
 
         >
+
         <LinearLayout
-            android:id="@+id/layout_date_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/layout_category"
-            >
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_date"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="@dimen/_14sp"/>
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_date_time_category"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:paddingHorizontal="@dimen/_12dp"
+
+                >
+
+                <LinearLayout
+                    android:id="@+id/layout_date_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/layout_category"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/text_date"
+                        android:textSize="@dimen/_14sp" />
 
 
-            <TextView
-                android:id="@+id/tv_time"
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/text_time"
+                        android:textSize="@dimen/_14sp"
+
+                        />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_category"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginHorizontal="@dimen/_10dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/txt_category"
+                        android:textSize="@dimen/_14sp" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_14dp"
+                        android:layout_height="@dimen/_14dp"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/tv_category"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_element"
+
+                        />
+
+                    <ImageView
+                        android:id="@+id/btn_show_category"
+                        android:layout_width="@dimen/_14dp"
+                        android:layout_height="@dimen/_14dp"
+                        android:layout_centerInParent="true"
+                        android:layout_toEndOf="@+id/tv_category"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_ac_more"
+
+                        />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/edit_title_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_time"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="@dimen/_14sp"
-                android:layout_marginStart="@dimen/_12dp"
+                android:layout_marginTop="@dimen/_12dp"
+                android:autofillHints=""
+                android:background="@drawable/bg_title"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="@string/title"
+                android:inputType="text"
+                android:maxLength="30"
+                android:paddingHorizontal="@dimen/_12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="@dimen/_16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_date_time_category"
 
                 />
+
+            <LinearLayout
+                android:id="@+id/layout_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_16sp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_text_task"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="@dimen/_8dp"
+                        android:layout_toStartOf="@+id/btn_save_task"
+                        android:autofillHints=""
+                        android:ellipsize="none"
+                        android:fontFamily="@font/roboto_regular"
+                        android:hint="@string/enter_task_here"
+                        android:inputType="text"
+                        android:maxLength="30"
+                        android:singleLine="false"
+
+                        />
+
+                    <ImageButton
+                        android:id="@+id/btn_save_task"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_8dp"
+                        android:background="@drawable/ic_v" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginVertical="@dimen/_8dp"
+                    tools:listitem="@layout/view_holder_task"
+                    />
+
+
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/edit_content_note"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginBottom="@dimen/_16sp"
+                android:autofillHints=""
+                android:background="@drawable/bg_title"
+                android:ellipsize="none"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="@dimen/_12dp"
+                android:scrollHorizontally="false"
+                android:singleLine="false"
+                android:textSize="@dimen/_14sp"
+                android:layout_marginVertical="@dimen/_8dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:listitem="@layout/view_holder_attachment"
+
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:paddingHorizontal="@dimen/_24dp"
+                android:id="@+id/recycler_view_recorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:listitem="@layout/view_holder_audio"
+                />
+
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/layout_category"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
 
-            >
-            <TextView
-                android:id="@+id/tv_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_14sp"
-                android:fontFamily="@font/roboto_regular"
-                android:text="@string/txt_category"
-                android:layout_centerInParent="true"
-                android:layout_marginHorizontal="@dimen/_10dp"
-                />
-
-            <ImageView
-                android:layout_width="@dimen/_14dp"
-                android:layout_height="@dimen/_14dp"
-                android:src="@drawable/ic_element"
-                android:layout_toStartOf="@+id/tv_category"
-                android:contentDescription="@string/app_name"
-                android:layout_centerInParent="true"
-
-                />
-
-            <ImageView
-                android:id="@+id/btn_show_category"
-                android:layout_width="@dimen/_14dp"
-                android:layout_height="@dimen/_14dp"
-                android:src="@drawable/ic_ac_more"
-                android:layout_toEndOf="@+id/tv_category"
-                android:contentDescription="@string/app_name"
-                android:layout_centerInParent="true"
-
-                />
-
-        </RelativeLayout>
-
-
-
-
-
-
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/edit_title_note"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:hint="@string/title"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:background="@drawable/bg_title"
-        android:textColorHint="@color/black"
-        android:fontFamily="@font/roboto_medium"
-        android:textSize="@dimen/_16sp"
-        app:layout_constraintTop_toBottomOf="@+id/layout_date_time_category"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/_12dp"
-        android:maxLength="30"
-        android:paddingHorizontal="@dimen/_12dp"
-
-        />
-
-    <EditText
-        android:id="@+id/edit_content_note"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_16sp"
-        android:autofillHints=""
-        android:background="@drawable/bg_title"
-        android:ellipsize="none"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:paddingHorizontal="@dimen/_12dp"
-        android:scrollHorizontally="false"
-        android:singleLine="false"
-        android:textSize="@dimen/_14sp"
-        app:layout_constraintBottom_toTopOf="@+id/layout_tool"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_title_note"
-        app:layout_constraintVertical_bias="0.0" />
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/layout_tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:weightSum="6"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="@dimen/_12dp"
+        android:layout_marginBottom="@dimen/_16dp"
         android:background="@drawable/bg_ac_edit_content_note"
         android:gravity="center"
-        android:layout_marginBottom="@dimen/_16dp"
-        android:layout_marginHorizontal="@dimen/_12dp"
-        >
+        android:orientation="horizontal"
+        android:weightSum="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <ImageButton
             android:id="@+id/btn_choose_font"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:backgroundTint="@color/transparent"
             android:contentDescription="@string/ac_edit_content_note"
             android:src="@drawable/ic_font"
-            android:backgroundTint="@color/transparent"
 
             />
 
@@ -187,30 +259,27 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="@string/ac_edit_content_note"
-            android:src="@drawable/ic_add"
             android:backgroundTint="@color/transparent"
-            />
+            android:contentDescription="@string/ac_edit_content_note"
+            android:src="@drawable/ic_add" />
 
         <ImageButton
             android:id="@+id/btn_choose_emoji"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="@string/ac_edit_content_note"
-            android:src="@drawable/ic_add_icon"
             android:backgroundTint="@color/transparent"
-            />
+            android:contentDescription="@string/ac_edit_content_note"
+            android:src="@drawable/ic_add_icon" />
 
         <ImageButton
             android:id="@+id/btn_add_recorder"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="@string/ac_edit_content_note"
-            android:src="@drawable/ic_add_voice"
             android:backgroundTint="@color/transparent"
-            />
+            android:contentDescription="@string/ac_edit_content_note"
+            android:src="@drawable/ic_add_voice" />
 
         <ImageButton
             android:id="@+id/btn_add_brush"
@@ -222,8 +291,6 @@
             android:src="@drawable/ic_add_brush" />
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
