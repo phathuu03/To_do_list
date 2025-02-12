@@ -60,7 +60,7 @@ class ChooseAttachmentBottomSheetFragment(private val viewModel: AttachmentNoteV
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
-            val typeMedia = MediaType.IMAGE
+            val typeMedia = MediaType.IMAGE.toString()
             val uriString = uri.toString()
             viewModel.addAttachment(AttachmentNote(uri=uriString , type = typeMedia))
 

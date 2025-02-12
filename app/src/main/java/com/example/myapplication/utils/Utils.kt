@@ -12,7 +12,7 @@ object Utils {
      var pathFont = Font(nameFont = "Medium", resId = R.font.roboto_regular)
     private val currentTime = LocalTime.now()
     private val currentDate = LocalDate.now()
-    val defaultFont: FontNote = FontNote(pathFont = pathFont , fontSize = 14)
+    val defaultFont: FontNote = FontNote()
 
 
     val fonts = mutableListOf<Font>() .apply {

@@ -1,13 +1,11 @@
 package com.example.myapplication.model
 
-import com.example.myapplication.utils.enums.MediaType
-
 data class AttachmentNote(
     val idAttachment: Int = generateId(),
 
     val uri: String,
 
-    val type: MediaType,
+    val type: String,
 
     ) {
     companion object {

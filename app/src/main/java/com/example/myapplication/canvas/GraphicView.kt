@@ -110,7 +110,8 @@ class GraphicView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             val file = File(context.getExternalFilesDir(null), name) // ✅ Lấy file từ thư mục đúng
             if (file.exists()) {
                 val uri = Uri.fromFile(file)
-                return CustomCanvas(fileName = name, uri = uri)
+                val nameUri = uri.toString()
+                return CustomCanvas(fileName = name, uri = nameUri)
             }
         }
 

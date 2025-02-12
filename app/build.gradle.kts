@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.devtools.ksp")
+
 }
 
 android {
@@ -50,6 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     val nav_version = "2.8.4"
+    val room_version = "2.6.1"
+
     implementation("androidx.navigation:navigation-fragment:$nav_version")
     implementation("androidx.navigation:navigation-ui:$nav_version")
     implementation ("me.relex:circleindicator:2.1.6")
@@ -61,5 +65,8 @@ dependencies {
 
     implementation ("com.google.android.exoplayer:exoplayer:2.15.0")
 
-
+    // room
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 }

@@ -1,13 +1,11 @@
 package com.example.myapplication.model
 
-import android.net.Uri
-
 data class CustomCanvas(
     var id: Int = generateId(),
 
     val fileName: String,
 
-    val uri: Uri
+    val uri: String
 ){
     companion object{
         private var currentId = 0

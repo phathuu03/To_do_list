@@ -172,7 +172,7 @@ class ChooseFontBottomSheet(private val viewModel: NoteFontViewModel) : BottomSh
 
         viewModel.font.observe(this) { fontNote ->
 
-            tvNameFont.text = fontNote.pathFont.nameFont
+            tvNameFont.text = fontNote.nameFont
 
             val defaultPosition = fontSizes.indexOf(fontNote.fontSize)
             spinner.setSelection(defaultPosition)
@@ -234,10 +234,11 @@ class ChooseFontBottomSheet(private val viewModel: NoteFontViewModel) : BottomSh
     }
 
 
-    override fun sendFont(font: Font) {
 
-        viewModel.setPathFont(font)
 
+    override fun sendFont(name: String, resId: Int) {
+        viewModel.setNameFont(name)
+        viewModel.setResIdFont(resId)
     }
 
 }

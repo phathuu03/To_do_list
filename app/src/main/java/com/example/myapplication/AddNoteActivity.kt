@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -20,26 +21,34 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.bottomsheet.BrushCanvasBottomSheet
 import com.example.myapplication.bottomsheet.ChooseAttachmentBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseCategoryBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseEmojiBottomSheet
 import com.example.myapplication.bottomsheet.ChooseFontBottomSheet
 import com.example.myapplication.bottomsheet.RecorderBottomSheetFragment
+import com.example.myapplication.dao.NoteDao
+import com.example.myapplication.database.DatabaseBuilder
 import com.example.myapplication.databinding.ActivityAddNoteBinding
+import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.listener.PasserEmoji
 import com.example.myapplication.model.AttachmentNote
 import com.example.myapplication.model.CategoryNote
 import com.example.myapplication.model.FontNote
 import com.example.myapplication.model.Task
+import com.example.myapplication.repository.NoteRepository
 import com.example.myapplication.viewmodel.AttachmentNoteViewModel
 import com.example.myapplication.viewmodel.CanvasViewModel
 import com.example.myapplication.viewmodel.CategoryViewModel
 import com.example.myapplication.viewmodel.DateTimeViewModel
 import com.example.myapplication.viewmodel.NoteFontViewModel
+import com.example.myapplication.viewmodel.NoteViewModel
 import com.example.myapplication.viewmodel.RecorderViewModel
+import com.example.myapplication.viewmodelfactory.NoteViewModelFactory
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import kotlinx.coroutines.launch
 
 
 class AddNoteActivity : AppCompatActivity() {
@@ -62,8 +71,11 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var canvasViewModel: CanvasViewModel
 
     private lateinit var spannable: SpannableStringBuilder
-    private val tasks: MutableList<Task>? = null
+    private val tasks: MutableList<Task> = mutableListOf()
     private val listCategory = mutableListOf<CategoryNote>()
+    private lateinit var noteDao: NoteDao
+    private lateinit var repository: NoteRepository
+    private lateinit var noteViewModel: NoteViewModel
 
 
     private val binding by lazy {
@@ -90,6 +102,7 @@ class AddNoteActivity : AppCompatActivity() {
         setDateTime()
         changeFontNote()
         defaultCategories()
+
         attachmentNoteViewModel.attachmentNotes.observe(this) {
             Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
         }
@@ -144,7 +157,6 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
-
     private fun openChooseEmoji() {
         val chooseEmojiBottomSheet = ChooseEmojiBottomSheet(object : PasserEmoji {
             override fun passEmoji(emoji: String): Unit {
@@ -192,18 +204,18 @@ class AddNoteActivity : AppCompatActivity() {
         val uncheckedBox = "\u2610" // ☐
 //        val checkedBox = "\u2611" // ☑
 
-        var nameTask = ""
-        tasks?.add(Task(nameTask = "Task "))
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.enter_task_name))
 
         val input = EditText(this)
         builder.setView(input)
         builder.setPositiveButton("OK") { dialog, which ->
-            val enteredText = input.text.toString()  // Lấy văn bản người dùng nhập
-            // Bạn có thể sử dụng `enteredText` ở đây
+            val enteredText = input.text.toString()
+            tasks.add(Task(nameTask = enteredText))
+
+
             editContent.append("\n$uncheckedBox  $enteredText \n")
-            tasks?.add(Task(nameTask = enteredText))
 
 
         }
@@ -211,7 +223,6 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     }
-
 
 
     private fun openChooseAttachBottomSheet() {
@@ -228,8 +239,9 @@ class AddNoteActivity : AppCompatActivity() {
         var textInitial: String = ""
         noteFontViewModel.font.observe(this) { font ->
             editContent.textSize = font.fontSize.toFloat()
-            val typeface: Typeface? = ResourcesCompat.getFont(this, font.pathFont.resId)
+            val typeface: Typeface? = ResourcesCompat.getFont(this, font.resId)
             editContent.setTypeface(typeface)
+
             if (font.isItalic) {
                 editContent.setTypeface(editContent.typeface, Typeface.ITALIC)
             }
@@ -257,7 +269,10 @@ class AddNoteActivity : AppCompatActivity() {
                 editContent.setText(editContent.text.toString().toLowerCase())
             }
 
+
+
         }
+
     }
 
 
@@ -286,6 +301,15 @@ class AddNoteActivity : AppCompatActivity() {
         attachmentNoteViewModel = ViewModelProvider(this)[AttachmentNoteViewModel::class.java]
         recorderViewModel = ViewModelProvider(this)[RecorderViewModel::class.java]
         canvasViewModel = ViewModelProvider(this)[CanvasViewModel::class.java]
+        noteDao = DatabaseBuilder.getInstance(application).noteDao()
+        repository = NoteRepository(noteDao)
+        noteViewModel =
+            ViewModelProvider(this, NoteViewModelFactory(repository))[NoteViewModel::class.java]
+
+        noteViewModel.allNotes.observe(this) {
+            Log.d("data", "dfdfads")
+        }
+
 
     }
 
@@ -311,9 +335,49 @@ class AddNoteActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.note_save_note -> {
+                saveNote()
+                return true
+            }
+
+
             else -> return super.onOptionsItemSelected(item)
         }
 
+    }
+
+    private fun saveNote() {
+    noteFontViewModel.font.observe(this){
+        this.fontNote = it
+    }
+
+
+
+        val note = NoteEntity(
+            dateStart = tvDate.text.toString(),
+            timeStart = tvDate.text.toString(),
+            timeReminder = null,
+            timeUpdate = null,
+            category = null,
+            title = editTitle.text.toString(),
+            font = fontNote!!,
+            content = editContent.text.toString(),
+            isFavorite = true
+        )
+
+
+        lifecycleScope.launch {
+            val id = noteViewModel.insertOrUpdateNote(note)
+            Log.d("data id", id.toString())
+
+        }
+        Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+            .also {
+                startActivity(it)
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

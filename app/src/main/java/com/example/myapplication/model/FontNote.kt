@@ -1,12 +1,14 @@
 package com.example.myapplication.model
 
-import com.example.myapplication.utils.Utils
+import com.example.myapplication.R
 
 data class FontNote(
 
     val idFont: Int = generateId(),
 
-    var pathFont: Font = Utils.pathFont,
+    var nameFont : String  ="Regular",
+
+    var resId: Int = R.font.roboto_regular,
 
     var fontSize: Int = 14,
 

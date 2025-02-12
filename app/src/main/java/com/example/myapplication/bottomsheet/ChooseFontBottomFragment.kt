@@ -48,14 +48,14 @@ class ChooseFontBottomFragment(
 
     override fun onItemSelected(font: Font, position: Int) {
         adapter.updateRecyclerView(position)
-        onClickFont.sendFont(font)
+        onClickFont.sendFont(font.nameFont, font.resId)
         dismiss()
 
 
     }
 
     interface OnClickFont {
-        fun sendFont(font: Font)
+        fun sendFont(name: String, resId: Int)
     }
 
 
