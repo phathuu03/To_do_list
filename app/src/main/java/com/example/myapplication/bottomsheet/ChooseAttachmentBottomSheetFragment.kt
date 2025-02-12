@@ -61,7 +61,8 @@ class ChooseAttachmentBottomSheetFragment(private val viewModel: AttachmentNoteV
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             val typeMedia = MediaType.IMAGE
-            viewModel.addAttachment(AttachmentNote(uri=uri , type = typeMedia))
+            val uriString = uri.toString()
+            viewModel.addAttachment(AttachmentNote(uri=uriString , type = typeMedia))
 
         } else {
             Log.d("PhotoPicker", "No media selected")
