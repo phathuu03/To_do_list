@@ -1,11 +1,9 @@
 package com.example.myapplication.model
 
-import android.net.Uri
-
 data class  AudioRecord(
     val id: Int = generateId() ,
     val fileName: String,
-    val uri: Uri,
+    val uri: String,
 
 ){
     companion object{

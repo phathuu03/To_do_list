@@ -1,14 +1,11 @@
 package com.example.myapplication.model
 
-import android.net.Uri
-import com.example.myapplication.utils.enums.MediaType
-
 data class AttachmentNote(
     val idAttachment: Int = generateId(),
 
-    val uri: Uri,
+    val uri: String,
 
-    val type: MediaType,
+    val type: String,
 
     ) {
     companion object {

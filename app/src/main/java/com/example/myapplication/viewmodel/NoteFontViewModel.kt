@@ -3,7 +3,6 @@ package com.example.myapplication.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.model.Font
 import com.example.myapplication.model.FontNote
 import com.example.myapplication.utils.Utils.defaultFont
 
@@ -26,8 +25,14 @@ class NoteFontViewModel : ViewModel() {
 
 
 
-    fun setPathFont(pathFont: Font) {
-        fontNote.pathFont = pathFont
+    fun setNameFont(name: String) {
+        fontNote.nameFont = name
+        _font.value = fontNote
+
+    }
+
+    fun setResIdFont(resId: Int) {
+        fontNote.resId = resId
         _font.value = fontNote
 
     }

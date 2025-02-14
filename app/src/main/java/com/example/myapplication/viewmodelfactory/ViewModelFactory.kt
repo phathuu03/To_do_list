@@ -1,7 +1,11 @@
-package com.example.myapplication.viewmodel
+package com.example.myapplication.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.viewmodel.AttachmentNoteViewModel
+import com.example.myapplication.viewmodel.CanvasViewModel
+import com.example.myapplication.viewmodel.MergedViewModel
+import com.example.myapplication.viewmodel.RecorderViewModel
 
 class ViewModelFactory(
     private val canvasViewModel: CanvasViewModel,

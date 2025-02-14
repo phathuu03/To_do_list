@@ -18,7 +18,7 @@
         android:title=""
         app:showAsAction="always"/>
 
-    <item android:id="@+id/note_tick"
+    <item android:id="@+id/note_save_note"
         android:icon="@drawable/ic_tick"
         android:title=""
         app:showAsAction="always"/>

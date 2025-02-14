@@ -64,9 +64,10 @@ class RecorderBottomSheetFragment(private val viewModel: RecorderViewModel) : Bo
 
         binding.btnSave.setOnClickListener {
             audioUri?.let {
-                val recorder = AudioRecord(fileName = fileName , uri = it)
+                val nameUri = it.toString()
+                val recorder = AudioRecord(fileName = fileName , uri = nameUri)
                 viewModel.insertRecorder(recorder)
-                Toast.makeText(requireContext(), "${recorder.uri}" , Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), recorder.uri, Toast.LENGTH_SHORT).show()
             }
 
             dismiss()

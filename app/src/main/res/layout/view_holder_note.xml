@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_note_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/_8dp"
+    android:background="@drawable/bg_item_note_blue"
+    android:layout_marginVertical="@dimen/_8dp"
+    android:layout_marginHorizontal="@dimen/_8dp"
+
+    >
+
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:fontFamily="@font/roboto_bold"
+        android:maxLength="15"
+        android:maxLines="1"
+        android:layout_marginBottom="@dimen/_8dp"
+        />
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_marginBottom="4dp"
+        android:text="@string/txt_lorem"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="@dimen/_10sp"
+        />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view_note_checked"
+        android:layout_width="54dp"
+        android:layout_height="76dp"
+        android:layout_marginVertical="@dimen/_8dp"
+        android:visibility="gone"
+        />
+
+
+    <ImageView
+        android:id="@+id/img_note"
+        android:layout_width="114dp"
+        android:layout_height="80dp"
+        android:layout_marginVertical="@dimen/_8dp"
+        android:background="@drawable/img_add_note"
+        android:contentDescription="@string/image_preview"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/item_checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_8dp"
+        android:singleLine="true"
+        android:text="@string/_1_6_checked_item"
+        android:textSize="@dimen/_10sp" />
+
+    <LinearLayout
+        android:id="@+id/layout_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginVertical="@dimen/_8dp"
+
+        >
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_date"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="@dimen/_10sp"
+
+            />
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_time"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginStart="@dimen/_12dp"
+
+            />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

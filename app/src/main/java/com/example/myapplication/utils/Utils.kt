@@ -12,7 +12,7 @@ object Utils {
      var pathFont = Font(nameFont = "Medium", resId = R.font.roboto_regular)
     private val currentTime = LocalTime.now()
     private val currentDate = LocalDate.now()
-    val defaultFont: FontNote = FontNote(pathFont = pathFont , fontSize = 14)
+    val defaultFont: FontNote = FontNote()
 
 
     val fonts = mutableListOf<Font>() .apply {
@@ -33,6 +33,7 @@ object Utils {
         (0x1F300..0x1F5FF),  // Biểu tượng & đồ vật
         (0x1F1E6..0x1F1FF)   // Cờ quốc gia
     ).flatten().map { Character.toChars(it).concatToString() }
+
 
 
 

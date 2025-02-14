@@ -1,14 +1,12 @@
 package com.example.myapplication.model
 
-import com.example.myapplication.utils.Utils
-import java.time.LocalDateTime
 
 data class Note(
     val idNote: Int = 0,
 
-    val dateStart: LocalDateTime,
+    val dateStart: String,
 
-    val timeStart: LocalDateTime,
+    val timeStart: String,
 
     val title: String ="Title",
 
@@ -16,9 +14,9 @@ data class Note(
 
     val content: String,
 
-    val font: FontNote = Utils.defaultFont,
+    val font: FontNote = FontNote(),
 
-    val timeReminder : LocalDateTime?,
+    val timeReminder : String?,
 
     val attachmentNotes: List<AttachmentNote>?,
 
@@ -28,7 +26,12 @@ data class Note(
 
     val tasks: List<Task>? ,
 
-    val timeUpdate: LocalDateTime?
+    val timeUpdate: String?,
+
+    val noteCanvas : List<CustomCanvas>?,
+
+
+
 
 
 

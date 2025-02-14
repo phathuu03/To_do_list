@@ -52,4 +52,6 @@
     <string name="clear">clear</string>
     <string name="emoji">Emoji</string>
     <string name="play_audio">Play Audio</string>
+    <string name="image_preview">image preview</string>
+    <string name="_1_6_checked_item">+1/6 checked item</string>
 </resources>
