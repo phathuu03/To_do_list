@@ -16,7 +16,7 @@ class LanguageAdapter(private val listener: OnItemSelectedListener) :
 
     inner class ViewHolderLanguage(private val binding: ViewHolderSelectLanguageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val rdBtn = binding.rdSelectedCountry
+        private val rdBtn = binding.rdSelectedCountry
         val item = binding.layoutChooseLanguage
 
         @SuppressLint("SuspiciousIndentation")

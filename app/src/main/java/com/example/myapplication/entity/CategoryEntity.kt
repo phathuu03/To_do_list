@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "tasks",
+    tableName = "categories",
     foreignKeys = [ForeignKey(
         entity = NoteEntity::class,
         parentColumns = ["idNote"],
@@ -15,9 +15,8 @@ import androidx.room.PrimaryKey
     )],
     indices = [Index(value = ["noteId"])]
 )
-data class TaskEntity(
-    @PrimaryKey(autoGenerate = true) val idTask: Int = 0,
+data class CategoryEntity(
+    @PrimaryKey(autoGenerate = true) val idCategoryNote: Int =0,
     val noteId: Long,
-    val nameTask: String,
-    val isChecked: Boolean = false
-)
+    val nameCategory : String
+    )

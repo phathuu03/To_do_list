@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
 )
 data class CustomCanvasEntity(
     @PrimaryKey(autoGenerate = true) val idCanvas: Int = 0,
-    val noteId: Int,
+    val noteId: Long,
     val fileName: String,
     val uri: String
 )

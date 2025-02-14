@@ -30,7 +30,11 @@ data class NoteWithDetails(
     )
     val tasks: List<TaskEntity> = emptyList(),
 
-
+    @Relation(
+        parentColumn = "idNote",
+        entityColumn = "noteId"
+    )
+    val categories: List<CategoryEntity> = emptyList()
 
 
     )

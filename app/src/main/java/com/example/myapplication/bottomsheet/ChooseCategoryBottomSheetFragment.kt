@@ -10,15 +10,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.adapter.CategoryAdapter
 import com.example.myapplication.databinding.BottomSheetChooseCategoryBinding
+import com.example.myapplication.entity.CategoryStringEntity
+import com.example.myapplication.listener.PasserCategory
 import com.example.myapplication.model.CategoryNote
-import com.example.myapplication.viewmodel.CategoryViewModel
+import com.example.myapplication.viewmodel.NoteViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-private val categoryNotes =  mutableListOf<CategoryNote>()
+private val categoryNotes = mutableListOf<CategoryNote>()
 
 
-class ChooseCategoryBottomSheetFragment(private val viewModel: CategoryViewModel) :
+@Suppress("UNREACHABLE_CODE")
+class ChooseCategoryBottomSheetFragment(
+    private val viewModel: NoteViewModel,
+    private val passerCategory: PasserCategory
+) :
     BottomSheetDialogFragment() {
+
+
     private val binding by lazy {
 
         BottomSheetChooseCategoryBinding.inflate(layoutInflater)
@@ -32,9 +40,7 @@ class ChooseCategoryBottomSheetFragment(private val viewModel: CategoryViewModel
 
 
     private fun initView() {
-      viewModel.listCategory.observe(requireActivity()){
 
-      }
 
     }
 
@@ -52,12 +58,20 @@ class ChooseCategoryBottomSheetFragment(private val viewModel: CategoryViewModel
             addCategory()
         }
         val recyclerView = binding.recyclerViewCategory
-        recyclerView.layoutManager  =  GridLayoutManager(requireContext() , 2)
-
-        viewModel.listCategory.observe(requireActivity()){
-            recyclerView.adapter = CategoryAdapter(it)
+        val adapter = CategoryAdapter(emptyList<CategoryStringEntity>().toMutableList(),
+            {
+            passerCategory.passerCategory(it)
+            dismiss()
+        },
+            {
+                viewModel.deleteCategoryName(it)
+            }
+        )
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.adapter = adapter
+        viewModel.listCategory.observe(viewLifecycleOwner) {
+            adapter.updateChanged(it)
         }
-
 
 
     }
@@ -70,11 +84,11 @@ class ChooseCategoryBottomSheetFragment(private val viewModel: CategoryViewModel
         builder.setView(input)
 
         builder.setPositiveButton("OK") { dialog, which ->
-            val enteredText = input.text.toString()
+            val enteredText = input.text.toString().trim()
             categoryNotes.add(CategoryNote(nameCategory = enteredText))
-
-            viewModel.addCategory(CategoryNote(nameCategory = enteredText))
+            viewModel.insertNameCategory(CategoryStringEntity(nameCategory = enteredText))
         }
+
         builder.show()
     }
 

@@ -2,6 +2,10 @@ package com.example.myapplication.repository
 
 import com.example.myapplication.dao.NoteDao
 import com.example.myapplication.entity.AttachmentNoteEntity
+import com.example.myapplication.entity.AudioRecordEntity
+import com.example.myapplication.entity.CategoryEntity
+import com.example.myapplication.entity.CategoryStringEntity
+import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.entity.NoteWithDetails
 import kotlinx.coroutines.Dispatchers
@@ -35,9 +39,60 @@ class NoteRepository(private val noteDao: NoteDao) {
     }
 
     // Lấy danh sách tệp đính kèm theo noteId
-    suspend fun getAttachmentsByNoteId(noteId: Int): List<AttachmentNoteEntity> = withContext(Dispatchers.IO) {
-        noteDao.getAttachmentsByNoteId(noteId)
+    suspend fun getAttachmentsByNoteId(noteId: Int): List<AttachmentNoteEntity> =
+        withContext(Dispatchers.IO) {
+            noteDao.getAttachmentsByNoteId(noteId)
+        }
+
+    suspend fun getAllCategories(): List<CategoryEntity> = withContext(Dispatchers.IO) {
+        noteDao.getAllCategories()
+
     }
 
+    suspend fun getCategoriesByNoteId(noteId: Int): List<CategoryEntity> =
+        withContext(Dispatchers.IO) {
+            noteDao.getCategoriesByNoteId(noteId)
+        }
+
+    suspend fun insertCategory(category: CategoryEntity): Long = withContext(Dispatchers.IO) {
+        noteDao.insertCategory(category)
+    }
+
+    suspend fun deleteCategory(category: CategoryEntity) = withContext(Dispatchers.IO) {
+        noteDao.deleteCategory(category)
+    }
+
+    suspend fun getAllNotesWithDetails(): List<NoteWithDetails> {
+        return noteDao.getAllNotesWithDetails()
+    }
+
+    suspend fun getAllCategoryString(): List<CategoryStringEntity> = withContext(Dispatchers.IO) {
+        noteDao.getAllCategoryName()
+    }
+
+    suspend fun insertNameCategory(categoryName: CategoryStringEntity) =
+        withContext(Dispatchers.IO) {
+            noteDao.insertCategoryString(categoryName)
+        }
+
+    suspend fun deleteCategoryString(categoryName: CategoryStringEntity) = withContext(Dispatchers.IO){
+        noteDao.deleteCategoryString(categoryName)
+    }
+
+
     // Tương tự, bạn có thể thêm các phương thức cho AudioRecord, CustomCanvas, và Task.
+
+    suspend fun insertAudioRecorder(audioRecordEntity: AudioRecordEntity) =
+        withContext(Dispatchers.IO) {
+            noteDao.insertAudioRecord(audioRecordEntity)
+        }
+
+    suspend fun insertCustomCanvas(customCanvasEntity: CustomCanvasEntity) = withContext(Dispatchers.IO){
+        noteDao.insertCustomCanvas(customCanvasEntity)
+    }
+
+
+
+
+
 }

@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
 )
 data class AudioRecordEntity(
     @PrimaryKey(autoGenerate = true) val idAudio: Int = 0,
-    val noteId: Int,
+    val noteId: Long,
     val fileName: String,
     val uri: String
 )

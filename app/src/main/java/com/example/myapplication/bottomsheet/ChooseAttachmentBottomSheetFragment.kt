@@ -50,10 +50,22 @@ class ChooseAttachmentBottomSheetFragment(private val viewModel: AttachmentNoteV
 
     private fun openImagePicker() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+
     }
 
     private fun openVideoPicker(){
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+        pickMediaVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+    }
+    private val pickMediaVideo = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            val typeMedia = MediaType.VIDEO.toString()
+            val uriString = uri.toString()
+            viewModel.addAttachment(AttachmentNote(uri=uriString , type = typeMedia))
+
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
     }
 
 

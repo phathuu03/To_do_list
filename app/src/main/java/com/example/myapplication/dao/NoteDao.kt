@@ -9,6 +9,8 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.example.myapplication.entity.AttachmentNoteEntity
 import com.example.myapplication.entity.AudioRecordEntity
+import com.example.myapplication.entity.CategoryEntity
+import com.example.myapplication.entity.CategoryStringEntity
 import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.entity.NoteWithDetails
@@ -65,4 +67,34 @@ interface NoteDao {
     @Transaction
     @Query("SELECT * FROM notes WHERE idNote = :id")
     suspend fun getNoteWithDetails(id: Int): NoteWithDetails?
+
+    @Transaction
+    @Query("SELECT * FROM notes")
+    suspend fun getAllNotesWithDetails(): List<NoteWithDetails>
+
+    // Lấy tất cả các danh mục
+    @Query("SELECT * FROM categories")
+    suspend fun getAllCategories(): List<CategoryEntity>
+
+    // Lấy danh mục theo noteId
+    @Query("SELECT * FROM categories WHERE noteId = :noteId")
+    suspend fun getCategoriesByNoteId(noteId: Int): List<CategoryEntity>
+
+    // Thêm hoặc cập nhật danh mục
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCategory(category: CategoryEntity): Long
+
+    // Xóa danh mục
+    @Delete
+    suspend fun deleteCategory(category: CategoryEntity)
+
+    // show all category name
+    @Query("SELECT * FROM category_string")
+    suspend fun getAllCategoryName() : List<CategoryStringEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCategoryString(categoryStringEntity: CategoryStringEntity)
+
+    @Delete
+    suspend fun deleteCategoryString(categoryStringEntity: CategoryStringEntity)
 }

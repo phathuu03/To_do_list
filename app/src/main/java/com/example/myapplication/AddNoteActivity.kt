@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -21,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.bottomsheet.BrushCanvasBottomSheet
 import com.example.myapplication.bottomsheet.ChooseAttachmentBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseCategoryBottomSheetFragment
@@ -31,7 +31,13 @@ import com.example.myapplication.bottomsheet.RecorderBottomSheetFragment
 import com.example.myapplication.dao.NoteDao
 import com.example.myapplication.database.DatabaseBuilder
 import com.example.myapplication.databinding.ActivityAddNoteBinding
+import com.example.myapplication.entity.AttachmentNoteEntity
+import com.example.myapplication.entity.AudioRecordEntity
+import com.example.myapplication.entity.CategoryEntity
+import com.example.myapplication.entity.CategoryStringEntity
+import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
+import com.example.myapplication.listener.PasserCategory
 import com.example.myapplication.listener.PasserEmoji
 import com.example.myapplication.model.AttachmentNote
 import com.example.myapplication.model.CategoryNote
@@ -48,7 +54,6 @@ import com.example.myapplication.viewmodel.RecorderViewModel
 import com.example.myapplication.viewmodelfactory.NoteViewModelFactory
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import kotlinx.coroutines.launch
 
 
 class AddNoteActivity : AppCompatActivity() {
@@ -63,19 +68,21 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var editContent: EditText
     private lateinit var btnAddRecorder: ImageButton
     private var fontNote: FontNote? = null
-    private var attachmentNotes: MutableList<AttachmentNote>? = null
+    private var attachmentNotes: MutableList<AttachmentNote> = mutableListOf()
     private lateinit var noteFontViewModel: NoteFontViewModel
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var attachmentNoteViewModel: AttachmentNoteViewModel
     private lateinit var recorderViewModel: RecorderViewModel
     private lateinit var canvasViewModel: CanvasViewModel
-
+    private var isFavorite: Boolean = false
     private lateinit var spannable: SpannableStringBuilder
     private val tasks: MutableList<Task> = mutableListOf()
     private val listCategory = mutableListOf<CategoryNote>()
     private lateinit var noteDao: NoteDao
     private lateinit var repository: NoteRepository
     private lateinit var noteViewModel: NoteViewModel
+    private var idNote: Long = 0
+    private val listNameCategory: MutableList<CategoryStringEntity> = mutableListOf()
 
 
     private val binding by lazy {
@@ -136,6 +143,9 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
     private fun checkPermissionRecorderAttachment() {
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
@@ -152,7 +162,8 @@ class AddNoteActivity : AppCompatActivity() {
 
         TedPermission.create().setPermissionListener(permissionListener)
             .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-            .setPermissions(Manifest.permission.CAMERA).check();
+            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .check();
 
     }
 
@@ -270,7 +281,6 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
 
-
         }
 
     }
@@ -278,7 +288,15 @@ class AddNoteActivity : AppCompatActivity() {
 
     private fun openChooseCategoryFragment() {
         val bottomSheetChooseCategoryBottomSheetFragment =
-            ChooseCategoryBottomSheetFragment(categoryViewModel)
+            ChooseCategoryBottomSheetFragment(noteViewModel,
+                object : PasserCategory {
+                    override fun passerCategory(categoryStringEntity: CategoryStringEntity) {
+                        listNameCategory.add(categoryStringEntity)
+                    }
+
+                }
+
+            )
         bottomSheetChooseCategoryBottomSheetFragment.show(
             supportFragmentManager, bottomSheetChooseCategoryBottomSheetFragment.tag
         )
@@ -335,6 +353,17 @@ class AddNoteActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.note_favorite ->{
+                isFavorite = !isFavorite
+                val icDrawble = item.icon
+                icDrawble?.let{
+                    val color = if(isFavorite) Color.RED else Color.GRAY
+                    it.setTint(color)
+                    item.setIcon(it)
+                }
+                return true
+            }
+
             R.id.note_save_note -> {
                 saveNote()
                 return true
@@ -347,42 +376,120 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     private fun saveNote() {
-    noteFontViewModel.font.observe(this){
-        this.fontNote = it
-    }
-
+        noteFontViewModel.font.observe(this) {
+            this.fontNote = it
+        }
 
 
         val note = NoteEntity(
             dateStart = tvDate.text.toString(),
-            timeStart = tvDate.text.toString(),
+            timeStart = tvTime.text.toString(),
             timeReminder = null,
             timeUpdate = null,
-            category = null,
             title = editTitle.text.toString(),
             font = fontNote!!,
             content = editContent.text.toString(),
-            isFavorite = true
+            isFavorite = isFavorite
         )
+        noteViewModel.insertOrUpdateNote(note)
+
+        val listAttachmentEntity = mutableListOf<AttachmentNoteEntity>()
+        val listRecorder = mutableListOf<AudioRecordEntity>()
+        val listCustomCanvas = mutableListOf<CustomCanvasEntity>()
+        noteViewModel.idNote.observe(this) { idNote ->
+            this.idNote = idNote
 
 
-        lifecycleScope.launch {
-            val id = noteViewModel.insertOrUpdateNote(note)
-            Log.d("data id", id.toString())
+            attachmentNoteViewModel.attachmentNotes.observe(this) {
+                it?.forEach { att ->
 
-        }
-        Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-            .also {
-                startActivity(it)
+                    val attachmentNoteEntity = AttachmentNoteEntity(
+                        noteId = this.idNote,
+                        uri = att.uri,
+                        type = att.type
+                    )
+                    listAttachmentEntity.add(attachmentNoteEntity)
+                }
+
+
             }
+
+            recorderViewModel.recorders.observe(this) { recorder ->
+
+                recorder?.forEach { itemRecorder ->
+                    val audioRecordEntity = AudioRecordEntity(
+                        noteId = idNote,
+                        fileName = itemRecorder.fileName,
+                        uri = itemRecorder.uri
+                    )
+                    listRecorder.add(audioRecordEntity)
+
+                }
+
+            }
+
+            canvasViewModel.canvas.observe(this){canvas ->
+
+                canvas.forEach {
+                    val canvasEntity = CustomCanvasEntity(
+                        noteId = idNote,
+                        fileName = it.fileName,
+                        uri = it.uri
+                    )
+                    listCustomCanvas.add(canvasEntity)
+                }
+
+            }
+
+            // them can vas
+            if(listCustomCanvas.isNotEmpty()){
+                listCustomCanvas.forEach {
+                    noteViewModel.insertCustomerCanvas(it)
+                }
+            }
+
+            // them recorder
+            if (listRecorder.isNotEmpty()) {
+                listRecorder.forEach { recorder ->
+                    noteViewModel.insertAudioRecorder(recorder)
+                }
+            }
+
+
+
+            // them attachment
+            if (listAttachmentEntity.isNotEmpty()) {
+                listAttachmentEntity.forEach {
+                    noteViewModel.insertOrUpdateAttachment(it)
+                }
+            }
+
+            // them category
+            if (listNameCategory.isNotEmpty()) {
+                listNameCategory.forEach { nameCategory ->
+                    noteViewModel.insertCategory(
+                        CategoryEntity(
+                            noteId = idNote,
+                            nameCategory = nameCategory.nameCategory
+                        )
+                    )
+                }
+            }
+
+
+        }
+
+
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_note_menu, menu)
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun checkPermissionRecorder() {
@@ -403,8 +510,13 @@ class AddNoteActivity : AppCompatActivity() {
             .setPermissions(Manifest.permission.RECORD_AUDIO).check();
     }
 
+    override fun onPause() {
+        super.onPause()
+
+    }
     override fun onResume() {
         super.onResume()
+
 
     }
 

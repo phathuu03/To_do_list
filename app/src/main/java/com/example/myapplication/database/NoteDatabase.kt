@@ -6,6 +6,8 @@ import androidx.room.TypeConverters
 import com.example.myapplication.dao.NoteDao
 import com.example.myapplication.entity.AttachmentNoteEntity
 import com.example.myapplication.entity.AudioRecordEntity
+import com.example.myapplication.entity.CategoryEntity
+import com.example.myapplication.entity.CategoryStringEntity
 import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.entity.TaskEntity
@@ -17,7 +19,9 @@ import com.example.myapplication.utils.Converters
         AttachmentNoteEntity::class,
         AudioRecordEntity::class,
         CustomCanvasEntity::class,
-        TaskEntity::class
+        TaskEntity::class,
+        CategoryEntity::class,
+        CategoryStringEntity::class
     ],
     version = 1,
     exportSchema = false

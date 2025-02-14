@@ -3,7 +3,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.myapplication.utils.enums.MediaType
 
 @Entity(
     tableName = "attachment_notes",
@@ -17,7 +16,7 @@ import com.example.myapplication.utils.enums.MediaType
 )
 data class AttachmentNoteEntity(
     @PrimaryKey(autoGenerate = true) val idAttachment: Int = 0,
-    val noteId: Int,
+    val noteId: Long,
     val uri: String,
-    val type: MediaType
+    val type: String
 )
