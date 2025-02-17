@@ -2,10 +2,15 @@ package com.example.myapplication
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
@@ -40,9 +45,11 @@ import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.listener.PasserCategory
 import com.example.myapplication.listener.PasserEmoji
 import com.example.myapplication.model.AttachmentNote
+import com.example.myapplication.model.Calendar
 import com.example.myapplication.model.CategoryNote
 import com.example.myapplication.model.FontNote
 import com.example.myapplication.model.Task
+import com.example.myapplication.reciver.AlarmReceiver
 import com.example.myapplication.repository.NoteRepository
 import com.example.myapplication.viewmodel.AttachmentNoteViewModel
 import com.example.myapplication.viewmodel.CanvasViewModel
@@ -52,6 +59,8 @@ import com.example.myapplication.viewmodel.NoteFontViewModel
 import com.example.myapplication.viewmodel.NoteViewModel
 import com.example.myapplication.viewmodel.RecorderViewModel
 import com.example.myapplication.viewmodelfactory.NoteViewModelFactory
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 
@@ -83,6 +92,7 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var noteViewModel: NoteViewModel
     private var idNote: Long = 0
     private val listNameCategory: MutableList<CategoryStringEntity> = mutableListOf()
+    private var calendarAlarm: Calendar? = null
 
 
     private val binding by lazy {
@@ -104,6 +114,7 @@ class AddNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initView()
+        createNotificationChannel()
         setUpToolBar()
         setUpViewModelFont()
         setDateTime()
@@ -146,6 +157,7 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
     }
+
     private fun checkPermissionRecorderAttachment() {
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
@@ -346,6 +358,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -353,11 +366,17 @@ class AddNoteActivity : AppCompatActivity() {
                 return true
             }
 
-            R.id.note_favorite ->{
+            R.id.note_alarm -> {
+
+                chooseCalender()
+                return true
+            }
+
+            R.id.note_favorite -> {
                 isFavorite = !isFavorite
                 val icDrawble = item.icon
-                icDrawble?.let{
-                    val color = if(isFavorite) Color.RED else Color.GRAY
+                icDrawble?.let {
+                    val color = if (isFavorite) Color.RED else Color.GRAY
                     it.setTint(color)
                     item.setIcon(it)
                 }
@@ -375,6 +394,34 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
+    private fun chooseCalender() {
+
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(12)
+            .setMinute(0)
+            .setTitleText("Select Alarm Time")
+            .build()
+        timePicker.show(supportFragmentManager, "")
+
+        timePicker.addOnPositiveButtonClickListener {
+            val hour = timePicker.hour.toLong()
+            val minute = timePicker.minute.toLong()
+            val calender = java.util.Calendar.getInstance().apply {
+                set(java.util.Calendar.HOUR_OF_DAY, timePicker.hour)
+                set(java.util.Calendar.MINUTE, timePicker.minute)
+                set(java.util.Calendar.SECOND, 0)
+                set(java.util.Calendar.MILLISECOND, 0)
+            }
+
+            calendarAlarm = Calendar(
+                timestampL = calender.timeInMillis
+            )
+
+        }
+
+    }
+
     private fun saveNote() {
         noteFontViewModel.font.observe(this) {
             this.fontNote = it
@@ -388,9 +435,11 @@ class AddNoteActivity : AppCompatActivity() {
             timeUpdate = null,
             title = editTitle.text.toString(),
             font = fontNote!!,
+            calendar = calendarAlarm,
             content = editContent.text.toString(),
-            isFavorite = isFavorite
-        )
+            isFavorite = isFavorite,
+
+            )
         noteViewModel.insertOrUpdateNote(note)
 
         val listAttachmentEntity = mutableListOf<AttachmentNoteEntity>()
@@ -427,8 +476,14 @@ class AddNoteActivity : AppCompatActivity() {
                 }
 
             }
+            // alarm
 
-            canvasViewModel.canvas.observe(this){canvas ->
+            calendarAlarm?.let {
+                setAlarm(it.timestampL)
+            }
+
+
+            canvasViewModel.canvas.observe(this) { canvas ->
 
                 canvas.forEach {
                     val canvasEntity = CustomCanvasEntity(
@@ -442,7 +497,7 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
             // them can vas
-            if(listCustomCanvas.isNotEmpty()){
+            if (listCustomCanvas.isNotEmpty()) {
                 listCustomCanvas.forEach {
                     noteViewModel.insertCustomerCanvas(it)
                 }
@@ -454,7 +509,6 @@ class AddNoteActivity : AppCompatActivity() {
                     noteViewModel.insertAudioRecorder(recorder)
                 }
             }
-
 
 
             // them attachment
@@ -487,8 +541,30 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
+    private fun setAlarm(timestampL: Long) {
+
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val intent = Intent(
+            this,
+            AlarmReceiver::class.java
+        )
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            timestampL,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_note_menu, menu)
+        val item = menu?.getItem(R.id.note_favorite)
+
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -510,14 +586,32 @@ class AddNoteActivity : AppCompatActivity() {
             .setPermissions(Manifest.permission.RECORD_AUDIO).check();
     }
 
+
+
+
     override fun onPause() {
         super.onPause()
 
     }
+
     override fun onResume() {
         super.onResume()
 
 
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name: CharSequence = "akchannel"
+            val desc = "Channel for Alarm Manager"
+            val imp = NotificationManager.IMPORTANCE_MAX
+            val channel = NotificationChannel("androidknowledge", name, NotificationManager.IMPORTANCE_HIGH)
+            channel.description = desc
+            val notificationManager = getSystemService(
+                NotificationManager::class.java
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
 

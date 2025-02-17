@@ -8,7 +8,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/note_clock"
+        android:id="@+id/note_alarm"
         android:icon="@drawable/ic_clock"
         android:title=""
         app:showAsAction="always" />
