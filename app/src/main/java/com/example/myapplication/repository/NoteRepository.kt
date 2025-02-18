@@ -20,7 +20,12 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     // Thêm hoặc cập nhật ghi chú
     suspend fun insertOrUpdateNote(note: NoteEntity) = withContext(Dispatchers.IO) {
-        noteDao.insertNote(note)
+        if (note.idNote == 0L) {
+            noteDao.insertNote(note)
+        } else {
+            noteDao.updateNote(note)
+            -1
+        }
     }
 
     // Xóa ghi chú
@@ -29,7 +34,7 @@ class NoteRepository(private val noteDao: NoteDao) {
     }
 
     // Lấy ghi chú theo ID kèm thông tin chi tiết (NoteWithDetails)
-    suspend fun getNoteWithDetails(noteId: Int): NoteWithDetails? = withContext(Dispatchers.IO) {
+    suspend fun getNoteWithDetails(noteId: Long): NoteWithDetails? = withContext(Dispatchers.IO) {
         noteDao.getNoteWithDetails(noteId)
     }
 
@@ -89,6 +94,17 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     suspend fun insertCustomCanvas(customCanvasEntity: CustomCanvasEntity) = withContext(Dispatchers.IO){
         noteDao.insertCustomCanvas(customCanvasEntity)
+    }
+
+
+    // show note archive
+    suspend fun getAddArchiverNoteWithDetail() = withContext(Dispatchers.IO){
+        noteDao.getAllArchiveNotesWithDetails()
+    }
+
+    // show note trash
+    suspend fun getAddTrashNoteWithDetail() = withContext(Dispatchers.IO){
+        noteDao.getAllTrashNotesWithDetails()
     }
 
 

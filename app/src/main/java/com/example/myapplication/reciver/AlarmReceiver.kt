@@ -14,13 +14,12 @@ import com.gun0912.tedpermission.provider.TedPermissionProvider
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-
-
+        val title = intent?.getStringExtra("title_note")
 
         val builder: NotificationCompat.Builder =
             NotificationCompat.Builder(TedPermissionProvider.context, "androidknowledge")
                 .setSmallIcon(R.drawable.sym_def_app_icon)
-                .setContentTitle("Reminder")
+                .setContentTitle(title)
                 .setContentText("week up  tao.")
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -32,14 +31,9 @@ class AlarmReceiver : BroadcastReceiver() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return
         }
-        notificationManagerCompat.notify(123, builder.build())    }
+        notificationManagerCompat.notify(123, builder.build())
+    }
 }

@@ -25,11 +25,22 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
     private val _getAllNoteWithDetails = MutableLiveData<List<NoteWithDetails>>()
     val getAllNoteWithDetails : LiveData<List<NoteWithDetails>> = _getAllNoteWithDetails
 
+    private val _noteWithDetails = MutableLiveData<NoteWithDetails>()
+    val noteWithDetails : LiveData<NoteWithDetails> = _noteWithDetails
+
     private val _idNote = MutableLiveData<Long>()
     val idNote: LiveData<Long> = _idNote
 
     private val _listCategory = MutableLiveData<List<CategoryStringEntity>>()
     val listCategory: LiveData<List<CategoryStringEntity>> = _listCategory
+
+    private val _listNoteWithDetailArchive = MutableLiveData<List<NoteWithDetails>>()
+    val listNoteWithDetailsArchive: LiveData<List<NoteWithDetails>> = _listNoteWithDetailArchive
+
+
+    private val _listNoteWithDetailTrash = MutableLiveData<List<NoteWithDetails>>()
+    val listNoteWithDetailsTrash: LiveData<List<NoteWithDetails>> = _listNoteWithDetailTrash
+
 
 
     // Lấy tất cả ghi chú từ Repository và cập nhật LiveData
@@ -37,15 +48,17 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
         fetchAllNotes()
         fetchAllNoteDetails()
         fetchAllNameCategory()
+        getNoteWithDetail()
+
     }
 
-    private fun fetchAllNotes() {
+     fun fetchAllNotes() {
         viewModelScope.launch {
             val notes = repository.getAllNotes()
             _allNotes.postValue(notes)
         }
     }
-    private fun fetchAllNoteDetails(){
+     fun fetchAllNoteDetails(){
         viewModelScope.launch {
             val noteDetails = repository.getAllNotesWithDetails()
             _getAllNoteWithDetails.postValue(noteDetails)
@@ -54,15 +67,18 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
 
     fun insertOrUpdateNote(note: NoteEntity) {
         viewModelScope.launch {
-            // Thực hiện async nhưng đảm bảo kết quả trả về ngay lập tức
             val id = withContext(Dispatchers.IO) {
                 repository.insertOrUpdateNote(note)
             }
 
-            // Cập nhật ID note sau khi thực hiện xong
-            _idNote.postValue(id)
+            if (id == -1L) {
+                _idNote.postValue(note.idNote)
+            } else {
+                _idNote.postValue(id)
+            }
             fetchAllNotes()
             fetchAllNoteDetails()
+            getNoteWithDetail()
 
         }
     }
@@ -71,8 +87,8 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
     fun insertOrUpdateAttachment(attachmentNoteEntity: AttachmentNoteEntity){
         viewModelScope.launch {
             repository.insertAttachment(attachmentNoteEntity)
-            fetchAllNotes()
             fetchAllNoteDetails()
+            fetchAllNotes()
         }
     }
 
@@ -125,6 +141,19 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
             repository.insertCustomCanvas(customCanvasEntity)
         }
     }
+    fun getNoteWithDetails(id: Long){
+        viewModelScope.launch {
+           _noteWithDetails.postValue(repository.getNoteWithDetails(id))
+        }
+    }
+
+     fun getNoteWithDetail(){
+        viewModelScope.launch {
+            _listNoteWithDetailArchive.postValue(repository.getAddArchiverNoteWithDetail())
+        }
+    }
+
+
 
 
 

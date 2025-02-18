@@ -17,7 +17,7 @@ data class NoteEntity(
 
     val timeStart: String,
 
-    val title: String ="Title",
+    val title: String = "Title",
 
     val content: String,
 
@@ -25,10 +25,14 @@ data class NoteEntity(
 
     @Embedded val calendar: Calendar?,
 
-    val timeReminder : String?,
+    val timeReminder: String?,
 
-    val isFavorite : Boolean = false,
+    val isFavorite: Boolean = false,
 
     val timeUpdate: LocalDateTime?,
-    )
+
+    val isArchive: Boolean = false,
+
+    val isTrash : Boolean = false
+)
 

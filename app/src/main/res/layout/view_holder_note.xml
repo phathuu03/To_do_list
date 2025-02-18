@@ -48,12 +48,12 @@
 
     <ImageView
         android:id="@+id/img_note"
-        android:layout_width="114dp"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginVertical="@dimen/_8dp"
         android:background="@drawable/img_add_note"
         android:contentDescription="@string/image_preview"
-        android:scaleType="fitCenter" />
+        android:scaleType="center" />
 
     <TextView
         android:id="@+id/item_checked"

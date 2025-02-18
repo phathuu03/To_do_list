@@ -54,4 +54,8 @@
     <string name="play_audio">Play Audio</string>
     <string name="image_preview">image preview</string>
     <string name="_1_6_checked_item">+1/6 checked item</string>
+    <string name="duplicate_note">duplicate note</string>
+    <string name="archive_note">archive note</string>
+    <string name="trash_note">Trash note</string>
+    <string name="all">All</string>
 </resources>
