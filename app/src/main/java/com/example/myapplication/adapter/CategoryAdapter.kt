@@ -1,5 +1,6 @@
 package com.example.myapplication.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,7 @@ class CategoryAdapter(private val data: MutableList<CategoryStringEntity>,
     override fun onBindViewHolder(holder: ViewHolderCategory, position: Int) {
         holder.bind(data[position])
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun updateChanged(newData : List<CategoryStringEntity>){
         data.clear()
         data.addAll(newData)

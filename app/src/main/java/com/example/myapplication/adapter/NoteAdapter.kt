@@ -2,22 +2,23 @@ package com.example.myapplication.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ViewHolderNoteBinding
 import com.example.myapplication.entity.NoteWithDetails
 
-class NoteAdapter(private val data: MutableList<NoteWithDetails>, private val context: Context) :
+class NoteAdapter(
+    private val data: MutableList<NoteWithDetails>,
+    val onClickItem: (id: Long) -> Unit,
+    val onLongClickItem: (View, NoteWithDetails) -> Unit,
+    private val context: Context
+) :
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     inner class NoteViewHolder(private val binding: ViewHolderNoteBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -31,56 +32,68 @@ class NoteAdapter(private val data: MutableList<NoteWithDetails>, private val co
         private val layoutItem = binding.layoutNoteItem
 
         fun bind(noteWithDetails: NoteWithDetails) {
+            itemView.setOnClickListener {
+                onClickItem(noteWithDetails.note.idNote)
+            }
+            itemView.setOnLongClickListener {
+                onLongClickItem(it, noteWithDetails)
+                return@setOnLongClickListener true
+            }
+
             title.text = noteWithDetails.note.title
 
-            if (noteWithDetails.note.content == "" || noteWithDetails.note.content.isEmpty()) {
+            if (noteWithDetails.note.content.isBlank()) {
                 content.visibility = View.GONE
             } else {
                 content.visibility = View.VISIBLE
                 content.text = noteWithDetails.note.content
-
             }
+
+
             if (noteWithDetails.attachmentNotes.isEmpty() && noteWithDetails.tasks.isNotEmpty()) {
                 layoutItem.setBackgroundResource(R.drawable.bg_item_note_gray)
                 image.visibility = View.GONE
-//                recyclerView.visibility = View.VISIBLE
-//                recyclerView.layoutManager = LinearLayoutManager(context)
-                // bổ xung adapter
+                content.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+
+
+                recyclerView.layoutManager = LinearLayoutManager(context)
+                val maxHeight = context.resources.getDimensionPixelSize(R.dimen.max_height_task)
+                recyclerView.viewTreeObserver.addOnPreDrawListener {
+                    val height = recyclerView.height // Lấy chiều cao sau khi RecyclerView đã vẽ xong
+                    if (height > maxHeight) {
+                        recyclerView.layoutParams.height = maxHeight // Giới hạn chiều cao
+                    } else {
+                        recyclerView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                    true
+                }
+
+
+                recyclerView.adapter = TaskAdapter(noteWithDetails.tasks)
+
 
 
             } else if (noteWithDetails.attachmentNotes.isNotEmpty()) {
-
+                recyclerView.visibility = View.GONE
                 image.visibility = View.VISIBLE
+                layoutItem.setBackgroundResource(R.drawable.bg_item_note_blue)
                 val uriImage: Uri = Uri.parse(noteWithDetails.attachmentNotes[0].uri)
 
                 Glide.with(context)
                     .load(uriImage)
-                    .apply(RequestOptions().transform((RoundedCorners(120))))
-                    .into(object : CustomTarget<Drawable>() {
-                        override fun onResourceReady(
-                            resource: Drawable,
-                            transition: Transition<in Drawable>?
-                        ) {
-                            image.background = resource
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            TODO("Not yet implemented")
-                        }
-
-                    })
-
-                recyclerView.visibility = View.GONE
+//                       .apply(RequestOptions().transform(RoundedCorners(10)))
+                    .into(image)
 
 
             } else {
                 layoutItem.setBackgroundResource(R.drawable.bg_item_note_red)
-                recyclerView.visibility = View.GONE
                 image.visibility = View.GONE
 
             }
 
             if (noteWithDetails.tasks.isNotEmpty()) {
+                itemChecked.visibility = View.VISIBLE
                 itemChecked.text = StringBuilder().apply {
                     append("+ ")
                     val isItemChecked = noteWithDetails.tasks.count { it.isChecked }
@@ -115,6 +128,7 @@ class NoteAdapter(private val data: MutableList<NoteWithDetails>, private val co
             holder.bind(it[position])
         }
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateChange(newData: MutableList<NoteWithDetails>) {

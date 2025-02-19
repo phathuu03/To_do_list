@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/emoji"
-        android:textSize="@dimen/_16sp"
+        android:textSize="24sp"
+        android:padding="4dp"
         />
 
 

@@ -19,7 +19,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 private val categoryNotes = mutableListOf<CategoryNote>()
 
 
-@Suppress("UNREACHABLE_CODE")
 class ChooseCategoryBottomSheetFragment(
     private val viewModel: NoteViewModel,
     private val passerCategory: PasserCategory

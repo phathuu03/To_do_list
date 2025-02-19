@@ -63,14 +63,38 @@ interface NoteDao {
     @Query("SELECT * FROM tasks WHERE noteId = :noteId")
     suspend fun getTasksByNoteId(noteId: Int): List<TaskEntity>
 
+    @Insert
+    suspend fun addTask(task: TaskEntity)
+
     // *** Transaction: Get full details of Note with relations ***
     @Transaction
     @Query("SELECT * FROM notes WHERE idNote = :id")
-    suspend fun getNoteWithDetails(id: Int): NoteWithDetails?
+    suspend fun getNoteWithDetails(id: Long): NoteWithDetails?
 
+
+    // hien thi nhung muc khong bi an di
     @Transaction
-    @Query("SELECT * FROM notes")
+    @Query("SELECT * FROM notes WHERE isTrash = 0 and isArchive = 0")
     suspend fun getAllNotesWithDetails(): List<NoteWithDetails>
+
+
+    // hien thi nhung muc da xoa
+    @Transaction
+    @Query("SELECT * FROM notes WHERE isTrash = 1")
+    suspend fun getAllTrashNotesWithDetails(): List<NoteWithDetails>
+
+
+    // hien thi nhung muc da luu tru
+    @Transaction
+    @Query("SELECT * FROM notes WHERE isArchive = 1 ")
+    suspend fun getAllArchiveNotesWithDetails(): List<NoteWithDetails>
+
+
+
+
+
+
+
 
     // Lấy tất cả các danh mục
     @Query("SELECT * FROM categories")

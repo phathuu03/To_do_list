@@ -19,9 +19,10 @@ class FontAdapter(val onItemClick: OnItemSelectedListener) : RecyclerView.Adapte
         fun bind(font: Font, position: Int) {
 
             binding.tvNameFont.text = font.nameFont
-            rdIsSelected.isSelected = position == selectedPosition
                 binding.itemChooseFont.setOnClickListener {
                     onItemClick.onItemSelected(font, position )
+                    rdIsSelected.isSelected = position == selectedPosition
+                    notifyDataSetChanged()
                 }
         }
 

@@ -3,6 +3,7 @@ package com.example.myapplication.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.myapplication.model.Calendar
 import com.example.myapplication.model.FontNote
 import java.time.LocalDateTime
 
@@ -16,16 +17,22 @@ data class NoteEntity(
 
     val timeStart: String,
 
-    val title: String ="Title",
+    val title: String = "Title",
 
     val content: String,
 
     @Embedded val font: FontNote = FontNote(),
 
-    val timeReminder : String?,
+    @Embedded val calendar: Calendar?,
 
-    val isFavorite : Boolean = false,
+    val timeReminder: String?,
+
+    val isFavorite: Boolean = false,
 
     val timeUpdate: LocalDateTime?,
-    )
+
+    val isArchive: Boolean = false,
+
+    val isTrash : Boolean = false
+)
 

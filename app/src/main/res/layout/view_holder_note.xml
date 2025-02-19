@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_note_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -39,21 +40,22 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_note_checked"
-        android:layout_width="54dp"
-        android:layout_height="76dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_8dp"
         android:visibility="gone"
+        tools:listitem="@layout/view_holder_check_task"
         />
 
 
     <ImageView
         android:id="@+id/img_note"
-        android:layout_width="114dp"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginVertical="@dimen/_8dp"
         android:background="@drawable/img_add_note"
         android:contentDescription="@string/image_preview"
-        android:scaleType="fitCenter" />
+        android:scaleType="center" />
 
     <TextView
         android:id="@+id/item_checked"
