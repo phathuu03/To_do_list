@@ -63,6 +63,9 @@ interface NoteDao {
     @Query("SELECT * FROM tasks WHERE noteId = :noteId")
     suspend fun getTasksByNoteId(noteId: Int): List<TaskEntity>
 
+    @Insert
+    suspend fun addTask(task: TaskEntity)
+
     // *** Transaction: Get full details of Note with relations ***
     @Transaction
     @Query("SELECT * FROM notes WHERE idNote = :id")

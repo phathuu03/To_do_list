@@ -8,6 +8,7 @@ import com.example.myapplication.entity.CategoryStringEntity
 import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.entity.NoteWithDetails
+import com.example.myapplication.entity.TaskEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -105,6 +106,10 @@ class NoteRepository(private val noteDao: NoteDao) {
     // show note trash
     suspend fun getAddTrashNoteWithDetail() = withContext(Dispatchers.IO){
         noteDao.getAllTrashNotesWithDetails()
+    }
+
+    suspend fun addTask(task: TaskEntity) = withContext(Dispatchers.IO){
+        noteDao.addTask(task)
     }
 
 

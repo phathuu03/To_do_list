@@ -3,9 +3,12 @@ package com.example.myapplication.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +20,7 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.NoteAdapter
 import com.example.myapplication.adapter.TabLayoutAdapter
 import com.example.myapplication.databinding.FragmentHomeBinding
+import com.example.myapplication.entity.NoteWithDetails
 import com.example.myapplication.viewmodel.NoteViewModel
 
 
@@ -26,6 +30,7 @@ class HomeFragment() : Fragment() {
     private lateinit var adapter: NoteAdapter
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var noteViewModel: NoteViewModel
+    private lateinit var searchNote: EditText
     private val binding by lazy {
         FragmentHomeBinding.inflate(layoutInflater)
     }
@@ -38,7 +43,7 @@ class HomeFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        searchNote = binding.editSearch
     }
 
 
@@ -56,21 +61,24 @@ class HomeFragment() : Fragment() {
         val activity = requireActivity() as MainActivity
         noteViewModel = activity.noteViewModel
         recyclerView = binding.recyclerViewNote
-        initRecyclerViewCategory()
-        initRecyclerViewNotes()
+
 
 
 
         noteViewModel.getAllNoteWithDetails.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
-                adapter.updateChange(it.toMutableList())
                 binding.layoutDataNull.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
             } else {
+                recyclerView.visibility = View.VISIBLE
                 binding.layoutDataNull.visibility = View.GONE
+                initRecyclerViewNotes()
                 adapter.updateChange(it.toMutableList())
-            }
+                initRecyclerViewCategory(it.toMutableList())
+                searchNote(it.toMutableList())
 
+
+            }
         }
 
 
@@ -82,24 +90,78 @@ class HomeFragment() : Fragment() {
         }
     }
 
-    private fun initRecyclerViewCategory() {
+    private fun searchNote(listNoteWithDetail: MutableList<NoteWithDetails>) {
+        searchNote.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+
+                var listNoteSearch = mutableListOf<NoteWithDetails>()
+
+                listNoteSearch = listNoteWithDetail.filter {
+
+                    it.note.title.contains(s.toString(), true) ||
+                            it.note.content.contains(s.toString(), true)
+
+                }.toMutableList()
+
+                adapter.updateChange(listNoteSearch)
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().isBlank()){
+                    adapter.updateChange(listNoteWithDetail)
+                }
+
+            }
+
+        })
+
+    }
+
+    private fun initRecyclerViewCategory(listNoteWithDetail: MutableList<NoteWithDetails>)  {
         val recyclerViewCategory = binding.recyclerViewCategory
-        recyclerViewCategory.layoutManager = LinearLayoutManager(requireContext() , LinearLayoutManager.HORIZONTAL , false)
+        recyclerViewCategory.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
         val adapter = TabLayoutAdapter(
             mutableListOf(),
-            onClickItem = {  }
+            onClickItem = { cate ->
+                searchNote.setText("")
+                noteViewModel.listCategory.observe(viewLifecycleOwner) { listNameCate ->
+                    var listFilter = mutableListOf<NoteWithDetails>()
+                    if (cate.equals("all", true)) {
+                        listFilter.addAll(listNoteWithDetail)
+                        adapter.updateChange(listFilter)
+                    } else {
+                        listFilter = listNoteWithDetail.filter {
+                            it.categories.any { categoryDt ->
+                                categoryDt.nameCategory == cate
+                            }
+                        }.toMutableList()
+                        adapter.updateChange(listFilter)
+
+                    }
+                    searchNote(listFilter)
+
+                }
+
+
+            }
         )
 
         recyclerViewCategory.adapter = adapter
         val dataCategory = mutableListOf<String>("All")
 
-       noteViewModel.listCategory.observe(viewLifecycleOwner){
-           it?.forEach { cate ->
-               dataCategory.add(cate.nameCategory)
-           }
-           adapter.updateDataChanged(dataCategory)
-       }
-
+        noteViewModel.listCategory.observe(viewLifecycleOwner) {
+            it?.forEach { cate ->
+                dataCategory.add(cate.nameCategory)
+            }
+            adapter.updateDataChanged(dataCategory)
+        }
 
     }
 
@@ -133,7 +195,6 @@ class HomeFragment() : Fragment() {
 
                             return@setOnMenuItemClickListener true
                         }
-
 
 
                         else -> {

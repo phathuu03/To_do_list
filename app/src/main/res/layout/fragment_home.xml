@@ -42,9 +42,8 @@
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:backgroundTint="@color/white"
             android:paddingHorizontal="8dp"
-            android:src="@drawable/ic_more"
+            android:background="@drawable/ic_more"
             />
 
     </RelativeLayout>

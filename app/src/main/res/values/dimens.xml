@@ -9,4 +9,5 @@
     <dimen name="_24dp">24dp</dimen>
     <dimen name="_8dp">8dp</dimen>
     <dimen name="_10sp">10sp</dimen>
+    <dimen name="max_height_task">120dp</dimen>
 </resources>

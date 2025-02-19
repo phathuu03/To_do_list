@@ -214,7 +214,7 @@ class ChooseFontBottomSheet(private val viewModel: NoteFontViewModel) : BottomSh
     private fun initView() {
         colorToolSelected = ContextCompat.getColor(
             requireContext(),
-            me.relex.circleindicator.R.color.design_default_color_primary
+            R.color.variant
         )
         colorToolNonSelected = ContextCompat.getColor(requireContext(), R.color.black)
         tvNameFont = binding.tvNameFont

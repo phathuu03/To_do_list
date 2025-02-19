@@ -6,6 +6,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
@@ -23,7 +24,7 @@ class NoteAdapter(
         RecyclerView.ViewHolder(binding.root) {
         private val title = binding.tvTitle
         private val content = binding.tvContent
-        val image = binding.imgNote
+        private val image = binding.imgNote
         private val itemChecked = binding.itemChecked
         private val dateStart = binding.tvDate
         private val timeStart = binding.tvTime
@@ -52,10 +53,31 @@ class NoteAdapter(
             if (noteWithDetails.attachmentNotes.isEmpty() && noteWithDetails.tasks.isNotEmpty()) {
                 layoutItem.setBackgroundResource(R.drawable.bg_item_note_gray)
                 image.visibility = View.GONE
+                content.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
+
+
+                recyclerView.layoutManager = LinearLayoutManager(context)
+                val maxHeight = context.resources.getDimensionPixelSize(R.dimen.max_height_task)
+                recyclerView.viewTreeObserver.addOnPreDrawListener {
+                    val height = recyclerView.height // Lấy chiều cao sau khi RecyclerView đã vẽ xong
+                    if (height > maxHeight) {
+                        recyclerView.layoutParams.height = maxHeight // Giới hạn chiều cao
+                    } else {
+                        recyclerView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                    true
+                }
+
+
+                recyclerView.adapter = TaskAdapter(noteWithDetails.tasks)
+
+
+
             } else if (noteWithDetails.attachmentNotes.isNotEmpty()) {
-                layoutItem.setBackgroundResource(R.drawable.bg_item_note_blue)
+                recyclerView.visibility = View.GONE
                 image.visibility = View.VISIBLE
+                layoutItem.setBackgroundResource(R.drawable.bg_item_note_blue)
                 val uriImage: Uri = Uri.parse(noteWithDetails.attachmentNotes[0].uri)
 
                 Glide.with(context)
@@ -66,12 +88,12 @@ class NoteAdapter(
 
             } else {
                 layoutItem.setBackgroundResource(R.drawable.bg_item_note_red)
-                recyclerView.visibility = View.GONE
                 image.visibility = View.GONE
 
             }
 
             if (noteWithDetails.tasks.isNotEmpty()) {
+                itemChecked.visibility = View.VISIBLE
                 itemChecked.text = StringBuilder().apply {
                     append("+ ")
                     val isItemChecked = noteWithDetails.tasks.count { it.isChecked }

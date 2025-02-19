@@ -23,6 +23,7 @@ class TabLayoutAdapter(
             if (position == selectedPosition){
                 binding.line.visibility = View.VISIBLE
                 binding.tvCategory.setTextColor(ContextCompat.getColor(itemView.context , R.color.variant))
+                binding.tvCategory.textSize = 18F
             }else{
                 binding.line.visibility = View.GONE
             }

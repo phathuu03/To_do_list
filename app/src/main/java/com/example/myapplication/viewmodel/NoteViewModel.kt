@@ -11,6 +11,7 @@ import com.example.myapplication.entity.CategoryStringEntity
 import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
 import com.example.myapplication.entity.NoteWithDetails
+import com.example.myapplication.entity.TaskEntity
 import com.example.myapplication.repository.NoteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -147,9 +148,15 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
         }
     }
 
-     fun getNoteWithDetail(){
+     private fun getNoteWithDetail(){
         viewModelScope.launch {
             _listNoteWithDetailArchive.postValue(repository.getAddArchiverNoteWithDetail())
+        }
+    }
+
+    fun addTaskEntity(task: TaskEntity){
+        viewModelScope.launch {
+            repository.addTask(task)
         }
     }
 

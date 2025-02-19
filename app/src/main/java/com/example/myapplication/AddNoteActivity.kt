@@ -42,6 +42,7 @@ import com.example.myapplication.entity.CategoryEntity
 import com.example.myapplication.entity.CategoryStringEntity
 import com.example.myapplication.entity.CustomCanvasEntity
 import com.example.myapplication.entity.NoteEntity
+import com.example.myapplication.entity.TaskEntity
 import com.example.myapplication.listener.PasserCategory
 import com.example.myapplication.listener.PasserEmoji
 import com.example.myapplication.model.AttachmentNote
@@ -64,6 +65,8 @@ import com.google.android.material.timepicker.TimeFormat
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.concurrent.TimeUnit
 
 
 class AddNoteActivity : AppCompatActivity() {
@@ -103,6 +106,7 @@ class AddNoteActivity : AppCompatActivity() {
     private var isTrash = false
 
 
+
     private val binding by lazy {
         ActivityAddNoteBinding.inflate(layoutInflater)
 
@@ -118,10 +122,11 @@ class AddNoteActivity : AppCompatActivity() {
         checkBundle()
         if(isSaveOrAdd){
             setUpViewModelFont()
+            setDateTime()
+
         }
         createNotificationChannel()
         setUpToolBar()
-        setDateTime()
         changeFontNote()
         defaultCategories()
 
@@ -181,6 +186,9 @@ class AddNoteActivity : AppCompatActivity() {
                 setUpViewModelFont()
                 this.isTrash = it.note.isTrash
                 this.isArchive = it.note.isArchive
+                this.tvDate.text = it.note.dateStart
+                this.tvTime.text = it.note.timeStart
+                this.isFavorite= it.note.isFavorite
 
 
 
@@ -278,11 +286,7 @@ class AddNoteActivity : AppCompatActivity() {
         builder.setPositiveButton("OK") { dialog, which ->
             val enteredText = input.text.toString()
             tasks.add(Task(nameTask = enteredText))
-
-
             editContent.append("\n$uncheckedBox  $enteredText \n")
-
-
         }
         builder.show()
 
@@ -437,22 +441,23 @@ class AddNoteActivity : AppCompatActivity() {
     private fun chooseCalender() {
 
         val timePicker =
-            MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(12)
-                .setMinute(0).setTitleText("Select Alarm Time").build()
+            MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(LocalTime.now().hour)
+                .setMinute(LocalTime.now().minute).setTitleText("Select Alarm Time").build()
         timePicker.show(supportFragmentManager, "")
 
         timePicker.addOnPositiveButtonClickListener {
-            val hour = timePicker.hour.toLong()
-            val minute = timePicker.minute.toLong()
             val calender = java.util.Calendar.getInstance().apply {
                 set(java.util.Calendar.HOUR_OF_DAY, timePicker.hour)
                 set(java.util.Calendar.MINUTE, timePicker.minute)
                 set(java.util.Calendar.SECOND, 0)
                 set(java.util.Calendar.MILLISECOND, 0)
+
             }
 
             calendarAlarm = Calendar(
-                timestampL = calender.timeInMillis
+                timestampL = calender.timeInMillis,
+                hour =TimeUnit.HOURS.toHours(calender.timeInMillis),
+                minute = TimeUnit.MINUTES.toMinutes(calender.timeInMillis  / 60)
             )
 
         }
@@ -461,6 +466,15 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     private fun saveNote() {
+        if (editTitle.text.isNullOrBlank()){
+            Toast.makeText(this, "Title is not blank", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if(editContent.text.isNullOrBlank()) {
+            Toast.makeText(this, "Content is not blank", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         noteFontViewModel.font.observe(this) {
             this.fontNote = it
         }
@@ -523,7 +537,18 @@ class AddNoteActivity : AppCompatActivity() {
                     noteViewModel.insertOrUpdateAttachment(it)
                 }
             }
+            //task list
 
+            this.tasks.let { tasks ->
+                tasks.forEach { task ->
+                    val taskEntity = TaskEntity(
+                        noteId = idNote,
+                        nameTask = task.nameTask,
+                    )
+                    noteViewModel.addTaskEntity(taskEntity)
+                }
+
+            }
 
             recorderViewModel.recorders.observe(this) { recorder ->
 
@@ -602,8 +627,9 @@ class AddNoteActivity : AppCompatActivity() {
             this, AlarmReceiver::class.java
         )
 
-
+        intent.putExtra("id_note", this.idNote)
         intent.putExtra("title_note", editTitle.text.toString())
+        intent.putExtra("content_note", editContent.text.toString())
 
         val pendingIntent = PendingIntent.getBroadcast(
             this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
