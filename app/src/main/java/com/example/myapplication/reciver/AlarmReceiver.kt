@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.myapplication.AddNoteActivity
 import com.gun0912.tedpermission.provider.TedPermissionProvider
+import java.time.LocalTime
 
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -19,8 +20,8 @@ class AlarmReceiver : BroadcastReceiver() {
         val title = intent?.getStringExtra("title_note")
         val content = intent?.getStringExtra("content_note")
         val idNote = intent?.getLongExtra("id_note", -1)
-        val intent = Intent(context , AddNoteActivity::class.java)
-        intent.putExtra("id_note", idNote)
+        val intent1 = Intent(context , AddNoteActivity::class.java)
+        intent1.putExtra("id_note", idNote)
         val pendingIntent = PendingIntent.getActivity(context , 0 , intent , PendingIntent.FLAG_UPDATE_CURRENT)
 
 
@@ -43,6 +44,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
             return
         }
-        notificationManagerCompat.notify(123, builder.build())
+        notificationManagerCompat.notify(LocalTime.now().second, builder.build())
     }
 }

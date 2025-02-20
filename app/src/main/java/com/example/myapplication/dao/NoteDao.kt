@@ -61,7 +61,7 @@ interface NoteDao {
     suspend fun insertTask(task: TaskEntity)
 
     @Query("SELECT * FROM tasks WHERE noteId = :noteId")
-    suspend fun getTasksByNoteId(noteId: Int): List<TaskEntity>
+    suspend fun getTasksByNoteId(noteId: Long): List<TaskEntity>
 
     @Insert
     suspend fun addTask(task: TaskEntity)
@@ -88,9 +88,6 @@ interface NoteDao {
     @Transaction
     @Query("SELECT * FROM notes WHERE isArchive = 1 ")
     suspend fun getAllArchiveNotesWithDetails(): List<NoteWithDetails>
-
-
-
 
 
 

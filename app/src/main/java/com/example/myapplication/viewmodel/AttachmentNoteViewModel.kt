@@ -14,5 +14,9 @@ class AttachmentNoteViewModel : ViewModel() {
         _attachmentNotes.value = currentListAtt + attachmentNote
     }
 
+    fun removeAttachment(attachmentNote: AttachmentNote) {
+        val currentListAtt = _attachmentNotes.value ?: emptyList()
+        _attachmentNotes.value = currentListAtt.filter { it != attachmentNote }
+    }
 
 }

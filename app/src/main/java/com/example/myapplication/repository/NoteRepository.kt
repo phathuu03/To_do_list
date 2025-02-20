@@ -112,6 +112,10 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.addTask(task)
     }
 
+    suspend fun getTasksByNoteId(noteId : Long) = withContext(Dispatchers.IO){
+        noteDao.getTasksByNoteId(noteId)
+    }
+
 
 
 
