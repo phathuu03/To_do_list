@@ -12,7 +12,6 @@ class FontAdapter(val onItemClick: OnItemSelectedListener) : RecyclerView.Adapte
     private var selectedPosition = 0
     inner class FontViewHolder(val binding: ItemViewChooseFontBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val rdIsSelected = binding.isSelectedFont
 
 
         @SuppressLint("SuspiciousIndentation")
@@ -21,7 +20,6 @@ class FontAdapter(val onItemClick: OnItemSelectedListener) : RecyclerView.Adapte
             binding.tvNameFont.text = font.nameFont
                 binding.itemChooseFont.setOnClickListener {
                     onItemClick.onItemSelected(font, position )
-                    rdIsSelected.isSelected = position == selectedPosition
                     notifyDataSetChanged()
                 }
         }
