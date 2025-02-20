@@ -42,6 +42,9 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
     private val _listNoteWithDetailTrash = MutableLiveData<List<NoteWithDetails>>()
     val listNoteWithDetailsTrash: LiveData<List<NoteWithDetails>> = _listNoteWithDetailTrash
 
+    private val _listTaskEntity =  MutableLiveData<List<TaskEntity>>()
+    val listTaskEntity: LiveData<List<TaskEntity>> = _listTaskEntity
+
 
 
     // Lấy tất cả ghi chú từ Repository và cập nhật LiveData
@@ -157,6 +160,13 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
     fun addTaskEntity(task: TaskEntity){
         viewModelScope.launch {
             repository.addTask(task)
+        }
+    }
+
+    fun getTasksByNoteId(idNote : Long) {
+        viewModelScope.launch {
+            val tasksEntity = repository.getTasksByNoteId(noteId = idNote)  ?: emptyList<TaskEntity>()
+            _listTaskEntity.postValue(tasksEntity)
         }
     }
 

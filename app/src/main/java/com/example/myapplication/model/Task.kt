@@ -1,7 +1,7 @@
 package com.example.myapplication.model
 
 data class Task(
-    private val idTask: Int = generateId(),
+     val idTask: Int = generateId(),
     val nameTask :String ,
     val isChecked: Boolean = false
 ) {

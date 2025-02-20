@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -16,17 +15,21 @@ import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.adapter.AttachmentAdapter
+import com.example.myapplication.adapter.TaskInAddNoteAdapter
 import com.example.myapplication.bottomsheet.BrushCanvasBottomSheet
 import com.example.myapplication.bottomsheet.ChooseAttachmentBottomSheetFragment
 import com.example.myapplication.bottomsheet.ChooseCategoryBottomSheetFragment
@@ -67,6 +70,7 @@ import com.gun0912.tedpermission.normal.TedPermission
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 
 class AddNoteActivity : AppCompatActivity() {
@@ -80,6 +84,7 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var editTitle: EditText
     private lateinit var editContent: EditText
     private lateinit var btnAddRecorder: ImageButton
+    private lateinit var recyclerView: RecyclerView
     private var fontNote: FontNote? = null
     private var attachmentNotes: MutableList<AttachmentNote> = mutableListOf()
     private lateinit var noteFontViewModel: NoteFontViewModel
@@ -89,7 +94,7 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var canvasViewModel: CanvasViewModel
     private var isFavorite: Boolean = false
     private lateinit var spannable: SpannableStringBuilder
-    private val tasks: MutableList<Task> = mutableListOf()
+    private val tasks = mutableListOf<Task>()
     private val listCategory = mutableListOf<CategoryNote>()
     private lateinit var noteDao: NoteDao
     private lateinit var repository: NoteRepository
@@ -104,15 +109,16 @@ class AddNoteActivity : AppCompatActivity() {
     private val listCustomCanvas = mutableListOf<CustomCanvasEntity>()
     private var isArchive = false
     private var isTrash = false
+    private var isTaksList = false
+    private lateinit var adapter: TaskInAddNoteAdapter
 
+    private lateinit var adapterAttachment: AttachmentAdapter
+    private lateinit var recyclerViewAttachment: RecyclerView
 
 
     private val binding by lazy {
         ActivityAddNoteBinding.inflate(layoutInflater)
-
     }
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +126,7 @@ class AddNoteActivity : AppCompatActivity() {
         setContentView(binding.root)
         initView()
         checkBundle()
-        if(isSaveOrAdd){
+        if (isSaveOrAdd) {
             setUpViewModelFont()
             setDateTime()
 
@@ -129,12 +135,11 @@ class AddNoteActivity : AppCompatActivity() {
         setUpToolBar()
         changeFontNote()
         defaultCategories()
+        initViewAttment()
 
 
 
-        attachmentNoteViewModel.attachmentNotes.observe(this) {
-            Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
-        }
+
 
 
         val typeface = resources.getFont(R.font.roboto_medium)
@@ -165,6 +170,30 @@ class AddNoteActivity : AppCompatActivity() {
 
     }
 
+    private fun initViewAttment() {
+
+        attachmentNoteViewModel.attachmentNotes.observe(this) {
+            if (it.isEmpty()) {
+                recyclerViewAttachment.visibility = View.GONE
+            } else {
+                recyclerViewAttachment.visibility = View.VISIBLE
+                recyclerViewAttachment.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+                adapterAttachment = AttachmentAdapter(
+                    data = it,
+                    onDelAtt = { att ->
+                        attachmentNoteViewModel.removeAttachment(att)
+                    },
+                    context = this
+                )
+                recyclerViewAttachment.adapter = adapterAttachment
+
+            }
+        }
+
+    }
+
     private fun checkBundle() {
         idNote = intent.getLongExtra("id_note", -1L)
         if (idNote == -1L) {
@@ -188,8 +217,7 @@ class AddNoteActivity : AppCompatActivity() {
                 this.isArchive = it.note.isArchive
                 this.tvDate.text = it.note.dateStart
                 this.tvTime.text = it.note.timeStart
-                this.isFavorite= it.note.isFavorite
-
+                this.isFavorite = it.note.isFavorite
 
 
             } else {
@@ -233,6 +261,7 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     }
+
     private fun setUpViewModelFont() {
         if (this.fontNote == null) {
             noteFontViewModel.setFontDefault()
@@ -240,6 +269,7 @@ class AddNoteActivity : AppCompatActivity() {
             noteFontViewModel.setFontCustom(this.fontNote!!)
         }
     }
+
     private fun openCanvas() {
         val brushCanvasBottomSheet = BrushCanvasBottomSheet(canvasViewModel)
         brushCanvasBottomSheet.show(supportFragmentManager, brushCanvasBottomSheet.tag)
@@ -271,26 +301,36 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun insertCheckBox() {
-        val uncheckedBox = "\u2610" // ☐
+        val taskList = mutableListOf<TaskEntity>()
 
-//        val checkedBox = "\u2611" // ☑
+        if (!isTaksList) {
+            binding.layoutAddTask.visibility = View.VISIBLE
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            adapter = TaskInAddNoteAdapter(
+                data = mutableListOf(),
+                onDelNote = {
+                    tasks.remove(it)
+                    adapter.updateDataChanged(tasks)
+                },
+                onChangeText = { s, task ->
+
+                }
+
+            )
+            recyclerView.adapter = adapter
+            binding.btnInsertTask.setOnClickListener {
+                val newTask = Task(nameTask = "")
+                tasks.add(newTask)
+                adapter.updateDataChanged(tasks)
+            }
 
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.enter_task_name))
+        } else {
+            binding.layoutAddTask.visibility = View.GONE
 
-        val input = EditText(this)
-        builder.setView(input)
-        builder.setPositiveButton("OK") { dialog, which ->
-            val enteredText = input.text.toString()
-            tasks.add(Task(nameTask = enteredText))
-            editContent.append("\n$uncheckedBox  $enteredText \n")
         }
-        builder.show()
-
-
+        isTaksList = !isTaksList
     }
 
 
@@ -370,7 +410,9 @@ class AddNoteActivity : AppCompatActivity() {
         btnShowCategory = binding.btnShowCategory
         editTitle = binding.editTitleNote
         editContent = binding.editContentNote
+        recyclerViewAttachment = binding.recyclerViewAttachment
         spannable = SpannableStringBuilder(editContent.text)
+        recyclerView = binding.recyclerViewTask
         noteFontViewModel = ViewModelProvider(this)[NoteFontViewModel::class.java]
         categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java]
         attachmentNoteViewModel = ViewModelProvider(this)[AttachmentNoteViewModel::class.java]
@@ -384,8 +426,6 @@ class AddNoteActivity : AppCompatActivity() {
         noteViewModel.allNotes.observe(this) {
             Log.d("data", "dfdfads")
         }
-
-
     }
 
     private fun clickOpenFragmentChooseFont() {
@@ -441,7 +481,8 @@ class AddNoteActivity : AppCompatActivity() {
     private fun chooseCalender() {
 
         val timePicker =
-            MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(LocalTime.now().hour)
+            MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H)
+                .setHour(LocalTime.now().hour)
                 .setMinute(LocalTime.now().minute).setTitleText("Select Alarm Time").build()
         timePicker.show(supportFragmentManager, "")
 
@@ -456,8 +497,8 @@ class AddNoteActivity : AppCompatActivity() {
 
             calendarAlarm = Calendar(
                 timestampL = calender.timeInMillis,
-                hour =TimeUnit.HOURS.toHours(calender.timeInMillis),
-                minute = TimeUnit.MINUTES.toMinutes(calender.timeInMillis  / 60)
+                hour = TimeUnit.HOURS.toHours(calender.timeInMillis),
+                minute = TimeUnit.MINUTES.toMinutes(calender.timeInMillis / 60)
             )
 
         }
@@ -466,11 +507,11 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     private fun saveNote() {
-        if (editTitle.text.isNullOrBlank()){
+        if (editTitle.text.isNullOrBlank()) {
             Toast.makeText(this, "Title is not blank", Toast.LENGTH_SHORT).show()
             return
         }
-        if(editContent.text.isNullOrBlank()) {
+        if (editContent.text.isNullOrBlank()) {
             Toast.makeText(this, "Content is not blank", Toast.LENGTH_SHORT).show()
             return
         }
@@ -594,8 +635,6 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
 
-
-
             // them category
             if (listNameCategory.isNotEmpty()) {
                 listNameCategory.forEach { nameCategory ->
@@ -608,14 +647,11 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
 
-
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
 
         }
-
-
 
 
     }
@@ -632,7 +668,10 @@ class AddNoteActivity : AppCompatActivity() {
         intent.putExtra("content_note", editContent.text.toString())
 
         val pendingIntent = PendingIntent.getBroadcast(
-            this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            this,
+            Random(10000).nextInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         alarmManager.setInexactRepeating(
