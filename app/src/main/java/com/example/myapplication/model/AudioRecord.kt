@@ -4,6 +4,7 @@ data class  AudioRecord(
     val id: Int = generateId() ,
     val fileName: String,
     val uri: String,
+    var isPlaying : Boolean = false
 
 ){
     companion object{

@@ -3,12 +3,13 @@ package com.example.myapplication.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ViewHolderTaskInAddNoteBinding
 import com.example.myapplication.model.Task
 
 class TaskInAddNoteAdapter(
-    private val data: MutableList<Task>,
+    private var data: List<Task>,
     val onDelNote: (Task) -> Unit,
     val onChangeText: (String, Task) -> Unit
 
@@ -21,6 +22,9 @@ class TaskInAddNoteAdapter(
         fun bind(task: Task) {
             binding.btnDelNote.setOnClickListener {
                 onDelNote(task)
+            }
+            binding.editNameTask.addTextChangedListener{s ->
+                onChangeText(s.toString() , task)
             }
 
         }
@@ -48,9 +52,7 @@ class TaskInAddNoteAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateDataChanged(newData: MutableList<Task>) {
-        this.data.clear()
-        this.data.addAll(newData)
+        this.data = newData.toList()
         notifyDataSetChanged()
-
     }
 }

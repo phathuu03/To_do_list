@@ -169,7 +169,21 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
             _listTaskEntity.postValue(tasksEntity)
         }
     }
+    fun deleteAttachment(attachmentNoteEntity: AttachmentNoteEntity){
+        viewModelScope.launch {
+            repository.deleteAttachment(attachmentNoteEntity)
+            fetchAllNotes()
+            fetchAllNoteDetails()
+        }
+    }
 
+    fun deleteCanvas(canvasEntity: CustomCanvasEntity){
+        viewModelScope.launch {
+            repository.deleteCanvas(canvasEntity)
+            fetchAllNotes()
+            fetchAllNoteDetails()
+        }
+    }
 
 
 

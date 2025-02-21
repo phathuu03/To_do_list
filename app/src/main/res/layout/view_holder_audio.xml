@@ -1,5 +1,24 @@
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/playButton"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/play_audio"/>
+    android:paddingHorizontal="@dimen/_8dp"
+>
+    <ImageButton
+        android:id="@+id/btn_pause_or_play_recorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_play_music"
+        android:backgroundTint="@color/blue"
+        android:layout_centerVertical="true"
+        />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_toEndOf="@+id/btn_pause_or_play_recorder"
+        android:background="@drawable/ic_sound"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_8dp"
+        />
+
+
+</RelativeLayout>

@@ -116,6 +116,14 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.getTasksByNoteId(noteId)
     }
 
+    suspend fun deleteAttachment(attachment: AttachmentNoteEntity) = withContext(Dispatchers.IO){
+        noteDao.deleteAttachment(attachment)
+    }
+
+    suspend fun deleteCanvas(canvasEntity: CustomCanvasEntity) = withContext(Dispatchers.IO){
+        noteDao.deleteCanvasEntity(canvasEntity)
+    }
+
 
 
 

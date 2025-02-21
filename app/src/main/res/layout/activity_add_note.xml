@@ -159,9 +159,11 @@
             <EditText
                 android:id="@+id/edit_content_note"
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_16sp"
+                android:maxHeight="350dp"
                 android:autofillHints=""
+                android:hint="@string/enter_task_content"
                 android:background="@drawable/bg_title"
                 android:ellipsize="none"
                 android:fontFamily="@font/roboto_regular"
@@ -185,6 +187,22 @@
                 android:layout_marginVertical="@dimen/_16dp"
                 tools:listitem="@layout/view_holder_attachment"
                 android:visibility="gone"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_canvas"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginVertical="@dimen/_16dp"
+                tools:listitem="@layout/view_holder_canvas"
+                android:visibility="gone"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_audio"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginVertical="@dimen/_16dp"
+                tools:listitem="@layout/view_holder_audio"
                 />
 
 

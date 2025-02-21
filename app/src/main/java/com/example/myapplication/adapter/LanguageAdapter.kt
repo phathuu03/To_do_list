@@ -8,7 +8,7 @@ import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
 import com.example.myapplication.model.LanguageApplication
 import com.example.myapplication.utils.Utils.languages
 
-class LanguageAdapter(private val listener: OnItemSelectedListener) :
+class   LanguageAdapter(private val listener: OnItemSelectedListener) :
     RecyclerView.Adapter<LanguageAdapter.ViewHolderLanguage>() {
     private var selectedPosition = 0
 

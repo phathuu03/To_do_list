@@ -19,5 +19,6 @@ data class AudioRecordEntity(
     @PrimaryKey(autoGenerate = true) val idAudio: Int = 0,
     val noteId: Long,
     val fileName: String,
-    val uri: String
+    val uri: String,
+    val isPlaying : Boolean = false
 )

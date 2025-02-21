@@ -13,4 +13,9 @@ class CanvasViewModel : ViewModel() {
         val currentList = _canvas.value ?: emptyList()
         _canvas.value = currentList + canvas
     }
+
+    fun removeCanvas(canvas: CustomCanvas) {
+        val currentList = _canvas.value ?: emptyList()
+        _canvas.value = currentList.filter { it != canvas }
+    }
 }
