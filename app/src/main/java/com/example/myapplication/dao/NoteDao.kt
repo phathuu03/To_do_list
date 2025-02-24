@@ -51,6 +51,8 @@ interface NoteDao {
     @Query("SELECT * FROM audio_records WHERE noteId = :noteId")
     suspend fun getAudioRecordsByNoteId(noteId: Int): List<AudioRecordEntity>
 
+    @Delete
+    suspend fun deleteAudio(audioRecord: AudioRecordEntity)
     // *** CustomCanvasEntity ***
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCustomCanvas(customCanvas: CustomCanvasEntity)
@@ -69,7 +71,10 @@ interface NoteDao {
     @Query("SELECT * FROM tasks WHERE noteId = :noteId")
     suspend fun getTasksByNoteId(noteId: Long): List<TaskEntity>
 
-    @Insert
+    @Delete
+    suspend fun deleteTask(task: TaskEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTask(task: TaskEntity)
 
     // *** Transaction: Get full details of Note with relations ***

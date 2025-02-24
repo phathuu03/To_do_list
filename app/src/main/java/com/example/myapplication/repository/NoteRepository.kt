@@ -93,6 +93,10 @@ class NoteRepository(private val noteDao: NoteDao) {
             noteDao.insertAudioRecord(audioRecordEntity)
         }
 
+    suspend fun deleteAudio(audioRecordEntity: AudioRecordEntity) = withContext(Dispatchers.IO){
+        noteDao.deleteAudio(audioRecordEntity)
+    }
+
     suspend fun insertCustomCanvas(customCanvasEntity: CustomCanvasEntity) = withContext(Dispatchers.IO){
         noteDao.insertCustomCanvas(customCanvasEntity)
     }
@@ -114,6 +118,10 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     suspend fun getTasksByNoteId(noteId : Long) = withContext(Dispatchers.IO){
         noteDao.getTasksByNoteId(noteId)
+    }
+
+    suspend fun deleteTask(task: TaskEntity) = withContext(Dispatchers.IO){
+        noteDao.deleteTask(task)
     }
 
     suspend fun deleteAttachment(attachment: AttachmentNoteEntity) = withContext(Dispatchers.IO){

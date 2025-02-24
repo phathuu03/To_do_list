@@ -94,18 +94,8 @@ class RecorderBottomSheetFragment(private val viewModel: RecorderViewModel) : Bo
         fileName.let {
             val file = File(it)
             if (file.exists()) {
-                if (file.delete()) {
-                    Toast.makeText(
-                        requireActivity(), "File deleted successfully", Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(requireActivity(), "Failed to delete file", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            } else {
-                Toast.makeText(requireActivity(), "File not found", Toast.LENGTH_SHORT).show()
+                file.delete()
             }
-
         }
 
 
@@ -159,12 +149,10 @@ class RecorderBottomSheetFragment(private val viewModel: RecorderViewModel) : Bo
             try {
                 mediaRecorder?.prepare()
                 mediaRecorder?.start()
-                Toast.makeText(requireActivity(), "Recording started", Toast.LENGTH_SHORT).show()
 
                 statRecord = System.currentTimeMillis()
                 handler.post(updateTimeRunnable)
-            } catch (e: IOException) {
-                Log.e("Recording Error", "prepare() failed")
+            } catch (_: IOException) {
             }
 
 
@@ -178,9 +166,7 @@ class RecorderBottomSheetFragment(private val viewModel: RecorderViewModel) : Bo
             it.release()
             mediaRecorder = null
             handler.removeCallbacks(updateTimeRunnable)
-            Toast.makeText(requireContext(), "Recording saved to: $fileName", Toast.LENGTH_LONG)
-                .show()
-            Log.d("file name", fileName)
+
             val file = File(fileName)
             audioUri = Uri.fromFile(file)
         }

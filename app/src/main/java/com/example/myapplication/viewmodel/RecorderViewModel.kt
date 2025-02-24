@@ -17,5 +17,11 @@ class RecorderViewModel : ViewModel() {
 
     }
 
+    fun removeRecorder ( record: AudioRecord){
+        val currencyRecord = _recorders.value ?: emptyList()
+        _recorders.value = currencyRecord.filter { it != record }
+
+    }
+
 
 }

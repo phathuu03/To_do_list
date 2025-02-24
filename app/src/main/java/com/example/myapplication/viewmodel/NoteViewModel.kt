@@ -140,6 +140,14 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
         }
     }
 
+    fun deleteAudio(audioRecordEntity: AudioRecordEntity){
+        viewModelScope.launch {
+            repository.deleteAudio(audioRecordEntity)
+            fetchAllNotes()
+            fetchAllNoteDetails()
+        }
+    }
+
     fun insertCustomerCanvas(customCanvasEntity: CustomCanvasEntity){
         viewModelScope.launch {
             repository.insertCustomCanvas(customCanvasEntity)
@@ -169,11 +177,18 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
             _listTaskEntity.postValue(tasksEntity)
         }
     }
+
+    fun deleteTask(task: TaskEntity){
+        viewModelScope.launch {
+            repository.deleteTask(task)
+            fetchAllNotes()
+            fetchAllNoteDetails()
+        }
+    }
     fun deleteAttachment(attachmentNoteEntity: AttachmentNoteEntity){
         viewModelScope.launch {
             repository.deleteAttachment(attachmentNoteEntity)
-            fetchAllNotes()
-            fetchAllNoteDetails()
+
         }
     }
 

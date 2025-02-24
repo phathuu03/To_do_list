@@ -8,7 +8,8 @@ import com.example.myapplication.model.AudioRecord
 
 class RecorderAdapter(
     val data: MutableList<AudioRecord>,
-    val onClickItem: (AudioRecord) -> Unit
+    val onClickItem: (AudioRecord) -> Unit,
+    val onDeleteRecorder: (AudioRecord) -> Unit
 ) : RecyclerView.Adapter<RecorderAdapter.ViewHolderRecorder>() {
 
     // Lưu vị trí của item hiện tại đang được phát (play)
@@ -26,6 +27,9 @@ class RecorderAdapter(
                 binding.btnPauseOrPlayRecorder.setBackgroundResource(com.google.android.exoplayer2.R.drawable.exo_ic_play_circle_filled)
             }
 
+            binding.btnTrashRecorder.setOnClickListener {
+                onDeleteRecorder(audioRecord)
+            }
 
             binding.btnPauseOrPlayRecorder.setOnClickListener {
 

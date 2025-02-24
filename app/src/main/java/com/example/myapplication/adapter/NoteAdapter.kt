@@ -74,7 +74,20 @@ class NoteAdapter(
 
 
 
-            } else if (noteWithDetails.attachmentNotes.isNotEmpty()) {
+            } else if (noteWithDetails.attachmentNotes.isEmpty() && noteWithDetails.customCanvasList.isNotEmpty()){
+
+                recyclerView.visibility = View.GONE
+                image.visibility = View.VISIBLE
+                layoutItem.setBackgroundResource(R.drawable.bg_item_note_blue)
+                val uriImage: Uri = Uri.parse(noteWithDetails.customCanvasList[0].uri)
+
+                Glide.with(context)
+                    .load(uriImage)
+//                       .apply(RequestOptions().transform(RoundedCorners(10)))
+                    .into(image)
+            }
+
+            else if (noteWithDetails.attachmentNotes.isNotEmpty()) {
                 recyclerView.visibility = View.GONE
                 image.visibility = View.VISIBLE
                 layoutItem.setBackgroundResource(R.drawable.bg_item_note_blue)

@@ -1,9 +1,9 @@
 package com.example.myapplication.model
 
 data class Task(
-     val idTask: Int = generateId(),
-    val nameTask :String ,
-    val isChecked: Boolean = false
+    val idTask: Int = generateId(),
+    var nameTask :String,
+    var isChecked: Boolean = false
 ) {
     companion object {
         private var currentId = 0

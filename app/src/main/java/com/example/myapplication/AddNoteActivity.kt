@@ -14,6 +14,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Menu
@@ -25,8 +26,10 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -94,7 +97,6 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var btnAddRecorder: ImageButton
     private lateinit var recyclerView: RecyclerView
     private var fontNote: FontNote? = null
-    private var attachmentNotes: MutableList<AttachmentNote> = mutableListOf()
     private lateinit var noteFontViewModel: NoteFontViewModel
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var attachmentNoteViewModel: AttachmentNoteViewModel
@@ -117,7 +119,7 @@ class AddNoteActivity : AppCompatActivity() {
     private val listCustomCanvas = mutableListOf<CustomCanvasEntity>()
     private var isArchive = false
     private var isTrash = false
-    private var isTaksList = false
+    private var isTaskList = false
     private lateinit var adapter: TaskInAddNoteAdapter
     private lateinit var recorderAdapter: RecorderAdapter
 
@@ -128,6 +130,11 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var recyclerViewAudio: RecyclerView
     private var mediaPlayer: MediaPlayer? = null
     private var currentPosition: Int = 0
+
+    private val listTaskDel = mutableListOf<Task>()
+    private val listAttDel = mutableListOf<AttachmentNoteEntity>()
+    private val listCanvasDel = mutableListOf<CustomCanvasEntity>()
+    private val listRecordDel = mutableListOf<AudioRecordEntity>()
 
     private val binding by lazy {
         ActivityAddNoteBinding.inflate(layoutInflater)
@@ -161,6 +168,7 @@ class AddNoteActivity : AppCompatActivity() {
         }
         binding.btnInsertCheckBox.setOnClickListener {
             insertCheckBox()
+
         }
         binding.btnChooseAttachment.setOnClickListener {
             checkPermissionRecorderAttachment()
@@ -175,7 +183,7 @@ class AddNoteActivity : AppCompatActivity() {
             openChooseEmoji()
 
         }
-
+        onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
     private fun initViewAttment() {
@@ -215,6 +223,9 @@ class AddNoteActivity : AppCompatActivity() {
                         } else {
                             playRecorder(task.uri)
                         }
+                    },
+                    onDeleteRecorder = { recorder ->
+                        recorderViewModel.removeRecorder(recorder)
                     }
                 )
                 recyclerViewAudio.adapter = recorderAdapter
@@ -226,8 +237,8 @@ class AddNoteActivity : AppCompatActivity() {
     private fun pauseRecorder() {
         mediaPlayer?.let {
             if (it.isPlaying) {
-                currentPosition = it.currentPosition  // Lưu lại vị trí hiện tại khi dừng
-                it.pause()  // Dừng tạm thời việc phát
+                currentPosition = it.currentPosition
+                it.pause()
             }
         }
     }
@@ -238,14 +249,12 @@ class AddNoteActivity : AppCompatActivity() {
             try {
                 val uriMedia = Uri.parse(audioUri)
 
-                // Kiểm tra nếu mediaPlayer đang tồn tại và chuẩn bị lại nếu cần
                 mediaPlayer?.let {
                     if (it.isPlaying) {
                         it.stop()  // Dừng nếu đang phát
                     }
-                    it.reset()  // Đặt lại mediaPlayer nếu đã có âm thanh trước đó
+//                    it.reset()
                 } ?: run {
-                    // Khởi tạo MediaPlayer nếu chưa có
                     mediaPlayer = MediaPlayer()
                 }
 
@@ -259,19 +268,14 @@ class AddNoteActivity : AppCompatActivity() {
 
                     setDataSource(this@AddNoteActivity, uriMedia)
                     prepareAsync() // Sử dụng prepareAsync để tránh làm treo UI
-
                     setOnPreparedListener {
                         if (currentPosition > 0) {
-                            seekTo(currentPosition)  // Tiến hành phát từ vị trí đã lưu
+                            seekTo(currentPosition)
                         }
-                        start()  // Phát âm thanh
+                        start()
                     }
 
-                    setOnErrorListener { mp, what, extra ->
-                        Log.e("MediaPlayer", "Error: $what, $extra")
-                        Toast.makeText(this@AddNoteActivity, "Error playing audio", Toast.LENGTH_SHORT).show()
-                        false
-                    }
+
                 }
 
             } catch (e: IOException) {
@@ -329,8 +333,10 @@ class AddNoteActivity : AppCompatActivity() {
             noteViewModel.insertCustomerCanvas(canvasEntity)
             noteViewModel.getNoteWithDetails(idNote)
 
+
         }
     }
+
 
     private fun saveRecorder(idNote: Long) {
         recorderViewModel.recorders.observe(this) {
@@ -368,6 +374,7 @@ class AddNoteActivity : AppCompatActivity() {
                 // attachment
                 val listAttachments = mutableListOf<AttachmentNote>()
 
+
                 it.attachmentNotes.forEach { att ->
                     val attNote = AttachmentNote(
                         idAttachment = att.idAttachment,
@@ -376,24 +383,35 @@ class AddNoteActivity : AppCompatActivity() {
                     )
                     listAttachments.add(attNote)
                 }
-                if (listAttachments.isNotEmpty()) {
-                    recyclerViewAttachment.visibility = View.VISIBLE
-                    adapterAttachment = AttachmentAdapter(
-                        listAttachments,
-                        onDelAtt = { att ->
-                            val attachmentNoteEntity = AttachmentNoteEntity(
-                                idAttachment = att.idAttachment,
-                                noteId = idNote,
-                                uri = att.uri,
-                                type = att.type
-                            )
-                            noteViewModel.deleteAttachment(attachmentNoteEntity)
-                            noteViewModel.getNoteWithDetails(idNote)
 
-                        },
-                        context = this,
+                recyclerViewAttachment.visibility = View.VISIBLE
+                adapterAttachment = AttachmentAdapter(
+                    listAttachments,
+                    onDelAtt = { att ->
+                        val attachmentNoteEntity = AttachmentNoteEntity(
+                            idAttachment = att.idAttachment,
+                            noteId = idNote,
+                            uri = att.uri,
+                            type = att.type
+                        )
+                        listAttDel.add(attachmentNoteEntity)
+                        listAttachments.remove(att)
+                        adapterAttachment.notifyDataSetChanged()
+                    },
+                    context = this,
+                )
+                recyclerViewAttachment.adapter = adapterAttachment
+
+
+                //task
+                it.tasks.forEach { taskEtt ->
+                    val task = Task(
+                        idTask = taskEtt.idTask,
+                        nameTask = taskEtt.nameTask,
+                        isChecked = taskEtt.isChecked
                     )
-                    recyclerViewAttachment.adapter = adapterAttachment
+                    tasks.add(task)
+
                 }
 
 
@@ -414,6 +432,20 @@ class AddNoteActivity : AppCompatActivity() {
                         data = listRecorder,
                         onClickItem = {
 
+                        },
+                        onDeleteRecorder = { recorder ->
+                            val recorderEtt = AudioRecordEntity(
+                                idAudio = recorder.id,
+                                noteId = idNote,
+                                fileName = recorder.fileName,
+                                uri = recorder.uri,
+                                isPlaying = recorder.isPlaying
+                            )
+
+                            listRecordDel.add(recorderEtt)
+                            listRecorder.remove(recorder)
+                            recorderAdapter.notifyDataSetChanged()
+
                         }
                     )
                     recyclerViewAudio.adapter = recorderAdapter
@@ -425,30 +457,30 @@ class AddNoteActivity : AppCompatActivity() {
                 val listCanvas = mutableListOf<CustomCanvas>()
                 it.customCanvasList.forEach { canvasEtt ->
                     val canvas = CustomCanvas(
-                        id=canvasEtt.idCanvas,
+                        id = canvasEtt.idCanvas,
                         fileName = canvasEtt.fileName,
                         uri = canvasEtt.uri
                     )
                     listCanvas.add(canvas)
                 }
-                if (listCanvas.isNotEmpty()) {
-                    recyclerViewCanvas.visibility = View.VISIBLE
-                    canvasAdapter = CanvasAdapter(
-                        data = listCanvas,
-                        onDelete = { canvas ->
-                            val canvasEntity = CustomCanvasEntity(
-                                idCanvas = canvas.id,
-                                noteId = idNote,
-                                fileName = canvas.fileName,
-                                uri = canvas.uri
-                            )
-                            noteViewModel.deleteCanvas(canvasEntity)
-                            noteViewModel.getNoteWithDetails(idNote)
-                        },
-                        context = this
-                    )
-                    recyclerViewCanvas.adapter = canvasAdapter
-                }
+
+                recyclerViewCanvas.visibility = View.VISIBLE
+                canvasAdapter = CanvasAdapter(
+                    data = listCanvas,
+                    onDelete = { canvas ->
+                        val canvasEtt = CustomCanvasEntity(
+                            idCanvas = canvas.id,
+                            noteId = idNote,
+                            fileName = canvas.fileName,
+                            uri = canvas.uri
+                        )
+                        listCanvasDel.add(canvasEtt)
+                        listCanvas.remove(canvas)
+                        canvasAdapter.notifyDataSetChanged()
+                    },
+                    context = this
+                )
+                recyclerViewCanvas.adapter = canvasAdapter
 
 
             } else {
@@ -534,41 +566,42 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     private fun insertCheckBox() {
-        val taskList = mutableListOf<TaskEntity>()
-
-        if (!isTaksList) {
+        if (!isTaskList) {
             binding.layoutAddTask.visibility = View.VISIBLE
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = TaskInAddNoteAdapter(
-                data = listOf(),
-                onDelNote = {
-                    tasks.remove(it)
-                    adapter.updateDataChanged(tasks)
-                },
-                onChangeText = { s, task ->
-                    tasks = tasks.map {
-                        if (it.idTask == task.idTask)
-                            it.copy(nameTask = task.nameTask)
-                        else
-                            it
-                    }.toMutableList()
-                    adapter.updateDataChanged(tasks)
-                }
 
-            )
-            recyclerView.adapter = adapter
+            if (!::adapter.isInitialized) {  // Chỉ tạo Adapter 1 lần duy nhất
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                adapter = TaskInAddNoteAdapter(
+                    data = tasks.toMutableList(),
+                    onDelNote = { task ->
+                        tasks.remove(task)
+                        adapter.updateDataChanged(tasks)
+                        listTaskDel.add(task)
+                    },
+                    onChangeText = { s, task ->
+                        tasks.find { it.idTask == task.idTask }?.nameTask = s
+                        adapter.updateDataChanged(tasks)
+                    },
+
+                    onCheckChange = { isChecked, task ->
+                        tasks.find { it.idTask == task.idTask }?.isChecked = isChecked
+                        adapter.updateDataChanged(tasks)
+                    }
+                )
+                recyclerView.adapter = adapter
+            }
+
             binding.btnInsertTask.setOnClickListener {
                 val newTask = Task(nameTask = "")
                 tasks.add(newTask)
                 adapter.updateDataChanged(tasks)
             }
 
-
         } else {
             binding.layoutAddTask.visibility = View.GONE
-
         }
-        isTaksList = !isTaksList
+
+        isTaskList = !isTaskList
     }
 
 
@@ -686,16 +719,37 @@ class AddNoteActivity : AppCompatActivity() {
         supportActionBar?.title = ""
     }
 
+    private val backPressedCallback = object : OnBackPressedCallback(enabled = true) {
+        override fun handleOnBackPressed() {
+            isEnabled = false
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
+
                 return true
             }
 
             R.id.note_alarm -> {
-                chooseCalender()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val alarmManager =
+                        ContextCompat.getSystemService(this, AlarmManager::class.java)
+                    if (alarmManager?.canScheduleExactAlarms() == false) {
+                        Intent().also { intent ->
+                            intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                            this.startActivity(intent)
+                        }
+                    } else {
+                        chooseCalender()
+                    }
+                } else {
+                    chooseCalender()
+                }
                 return true
             }
 
@@ -843,7 +897,22 @@ class AddNoteActivity : AppCompatActivity() {
                         noteViewModel.insertOrUpdateAttachment(it)
                     }
                 }
+
+
             }
+
+            if(listAttDel.isNotEmpty()){
+                listAttDel.forEach {
+                    noteViewModel.deleteAttachment(it)
+                }
+            }
+            if(listRecorder.isNotEmpty()){
+                listRecorder.forEach {  noteViewModel.deleteAudio(it) }
+            }
+            if (listCanvasDel.isNotEmpty()){
+                listCanvasDel.forEach { noteViewModel.deleteCanvas(it) }
+            }
+
 
 
             //task list
@@ -851,12 +920,23 @@ class AddNoteActivity : AppCompatActivity() {
             this.tasks.let { tasks ->
                 tasks.forEach { task ->
                     val taskEntity = TaskEntity(
+                        idTask = task.idTask,
                         noteId = idNote,
                         nameTask = task.nameTask,
+                        isChecked = task.isChecked
                     )
                     noteViewModel.addTaskEntity(taskEntity)
                 }
 
+            }
+            this.listTaskDel.forEach { taskDel ->
+                val taskEtt = TaskEntity(
+                    idTask = taskDel.idTask,
+                    noteId = idNote,
+                    nameTask = taskDel.nameTask,
+                    isChecked = taskDel.isChecked
+                )
+                noteViewModel.deleteTask(taskEtt)
             }
 
             recorderViewModel.recorders.observe(this) { recorder ->
@@ -944,8 +1024,8 @@ class AddNoteActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP, timestampL, AlarmManager.INTERVAL_DAY, pendingIntent
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP, timestampL, pendingIntent
         )
 
     }
@@ -1004,6 +1084,14 @@ class AddNoteActivity : AppCompatActivity() {
             val notificationManager = getSystemService(
                 NotificationManager::class.java
             )
+            val soundUri = Uri.parse("android.resource://${packageName}/raw/mat_ket_noi_remix")
+
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM) // Đảm bảo hoạt động như âm báo thức
+                .build()
+
+            channel.setSound(soundUri,audioAttributes )
             notificationManager.createNotificationChannel(channel)
         }
     }
