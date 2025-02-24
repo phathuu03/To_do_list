@@ -425,6 +425,7 @@ class AddNoteActivity : AppCompatActivity() {
                 val listCanvas = mutableListOf<CustomCanvas>()
                 it.customCanvasList.forEach { canvasEtt ->
                     val canvas = CustomCanvas(
+                        id=canvasEtt.idCanvas,
                         fileName = canvasEtt.fileName,
                         uri = canvasEtt.uri
                     )
