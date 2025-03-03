@@ -16,7 +16,7 @@ data class Note(
 
     val font: FontNote = FontNote(),
 
-    val timeReminder : String?,
+    val isReminder : Boolean =false,
 
     val attachmentNotes: List<AttachmentNote>?,
 

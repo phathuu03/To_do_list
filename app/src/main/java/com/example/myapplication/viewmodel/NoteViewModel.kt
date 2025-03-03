@@ -79,6 +79,7 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
                 _idNote.postValue(note.idNote)
             } else {
                 _idNote.postValue(id)
+                getNoteWithDetails(id)
             }
             fetchAllNotes()
             fetchAllNoteDetails()

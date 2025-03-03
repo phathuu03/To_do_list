@@ -1,15 +1,17 @@
 package com.example.myapplication.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ViewHolderAudioBinding
+import com.example.myapplication.entity.AudioRecordEntity
 import com.example.myapplication.model.AudioRecord
 
 class RecorderAdapter(
-    val data: MutableList<AudioRecord>,
-    val onClickItem: (AudioRecord) -> Unit,
-    val onDeleteRecorder: (AudioRecord) -> Unit
+    val data: MutableList<Any>,
+    val onClickItem: (Any) -> Unit,
+    val onDeleteRecorder: (Any) -> Unit
 ) : RecyclerView.Adapter<RecorderAdapter.ViewHolderRecorder>() {
 
     // Lưu vị trí của item hiện tại đang được phát (play)
@@ -19,7 +21,7 @@ class RecorderAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(audioRecord: AudioRecord, position: Int) {
+        fun bind(item: Any, position: Int) {
 
             if (positionCurrent == position) {
                 binding.btnPauseOrPlayRecorder.setBackgroundResource(com.google.android.exoplayer2.R.drawable.exo_ic_pause_circle_filled)
@@ -28,20 +30,32 @@ class RecorderAdapter(
             }
 
             binding.btnTrashRecorder.setOnClickListener {
-                onDeleteRecorder(audioRecord)
+                onDeleteRecorder(item)
             }
 
             binding.btnPauseOrPlayRecorder.setOnClickListener {
-
-                if (positionCurrent != position) {
-                    positionCurrent = position
-                    audioRecord.isPlaying = false
-                } else {
-                    positionCurrent = -1
-                    audioRecord.isPlaying = true
+                if (item is AudioRecord) {
+                    if (positionCurrent != position) {
+                        positionCurrent = position
+                        item.isPlaying = false
+                    } else {
+                        positionCurrent = -1
+                        item.isPlaying = true
+                    }
+                    onClickItem(item)
+                } else if (item is AudioRecordEntity) {
+                    if (positionCurrent != position) {
+                        positionCurrent = position
+                        item.isPlaying = false
+                    } else {
+                        positionCurrent = -1
+                        item.isPlaying = true
+                    }
+                    onClickItem(item)
                 }
 
-                onClickItem(audioRecord)
+
+
                 notifyDataSetChanged()
             }
         }
@@ -60,5 +74,12 @@ class RecorderAdapter(
     // Gọi bind để gán dữ liệu cho từng item
     override fun onBindViewHolder(holder: ViewHolderRecorder, position: Int) {
         holder.bind(data[position], position)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateDataChanged(newData : MutableList<Any>){
+        this.data.clear()
+        this.data.addAll(newData)
+        notifyDataSetChanged()
     }
 }

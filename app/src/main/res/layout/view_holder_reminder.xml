@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="74dp"
     android:background="@drawable/bg_reminder"
@@ -27,15 +28,25 @@
             />
 
         <TextView
-            android:id="@+id/tv_date_start"
+            android:id="@+id/time_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textSize="12sp"
+            android:textSize="24sp"
             android:text="@string/_06_03_2022_14_48_pm"
-            android:fontFamily="@font/roboto_regular"
+            android:fontFamily="@font/roboto_bold"
             />
     </LinearLayout>
+
+    <Switch
+        android:id="@+id/sw_alarlam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 
 
 </RelativeLayout>

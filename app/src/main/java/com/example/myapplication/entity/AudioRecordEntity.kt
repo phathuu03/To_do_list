@@ -20,5 +20,5 @@ data class AudioRecordEntity(
     val noteId: Long,
     val fileName: String,
     val uri: String,
-    val isPlaying : Boolean = false
+    var isPlaying : Boolean = false
 )

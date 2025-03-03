@@ -58,7 +58,8 @@
     <string name="archive_note">archive note</string>
     <string name="trash_note">Trash note</string>
     <string name="all">All</string>
-    <string name="_06_03_2022_14_48_pm">06.03.2022, 14:48 PM</string>
+    <string name="_06_03_2022_14_48_pm">14:48 PM</string>
     <string name="add_check_list">Add check list</string>
     <string name="enter_task_content">enter content here</string>
+    <string name="select_time">Get select time</string>
 </resources>

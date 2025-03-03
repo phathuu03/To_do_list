@@ -25,7 +25,7 @@ data class NoteEntity(
 
     @Embedded val calendar: Calendar?,
 
-    val timeReminder: String?,
+    var isReminder : Boolean =false,
 
     val isFavorite: Boolean = false,
 

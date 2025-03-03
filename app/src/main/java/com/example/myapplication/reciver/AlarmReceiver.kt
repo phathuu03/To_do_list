@@ -22,7 +22,9 @@ class AlarmReceiver : BroadcastReceiver() {
         val idNote = intent?.getLongExtra("id_note", -1)
         val intent1 = Intent(context , AddNoteActivity::class.java)
         intent1.putExtra("id_note", idNote)
-        val pendingIntent = PendingIntent.getActivity(context , 0 , intent , PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(context , 0 , intent ,
+
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
 
         val builder: NotificationCompat.Builder =
@@ -33,7 +35,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
+
         val notificationManagerCompat =
             NotificationManagerCompat.from(TedPermissionProvider.context)
         if (ActivityCompat.checkSelfPermission(

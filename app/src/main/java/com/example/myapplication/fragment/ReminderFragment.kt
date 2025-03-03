@@ -3,6 +3,7 @@ package com.example.myapplication.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.MainActivity
+import com.example.myapplication.R
 import com.example.myapplication.adapter.ReminderAdapter
 import com.example.myapplication.databinding.FragmentReminderBinding
 import com.example.myapplication.entity.NoteWithDetails
+import com.example.myapplication.utils.Utils
 import com.example.myapplication.viewmodel.NoteViewModel
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import java.time.LocalTime
 
 
 class ReminderFragment : Fragment() {
@@ -31,7 +37,55 @@ class ReminderFragment : Fragment() {
 
         recyclerView = binding.recyclerViewReminder
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ReminderAdapter(mutableListOf())
+        adapter = ReminderAdapter(
+            mutableListOf(),
+            setAlarm = {
+                val note = it.note.apply {
+                    this.isReminder = true
+                }
+                it.note.calendar?.let { it1 ->
+                    Utils.setAlarm(
+                        requireContext(), it1.hour,
+                        it1.minute,
+                        it.note.idNote.toInt(),
+                        noteWithDetail = it
+                    )
+                    Log.d("data h m", "${it1.hour} , ${it1.minute}")
+                }
+                noteViewModel.insertOrUpdateNote(note)
+
+            },
+            cancelAlarm = {
+
+                val note = it.note.apply { this.isReminder = false }
+                noteViewModel.insertOrUpdateNote(note)
+                Utils.cancelAlarm(requireContext(), it.note.idNote.toInt())
+            },
+            setCalendar = { noteWithDetail ->
+                val timePicker = MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_12H)
+                    .setHour(LocalTime.now().hour)
+                    .setMinute(LocalTime.now().minute)
+                    .setTitleText(R.string.select_time)
+                    .build()
+                timePicker.show(requireActivity().supportFragmentManager, "")
+                timePicker.addOnPositiveButtonClickListener {
+                    Utils.setAlarm(
+                        requireContext(),
+                        timePicker.hour, timePicker.minute,
+                        noteWithDetail.note.idNote.toInt(),
+                        noteWithDetail = noteWithDetail
+                    )
+                    val note = noteWithDetail.note.apply {
+                        isReminder = true
+                        calendar?.hour = timePicker.hour
+                        calendar?.minute = timePicker.minute
+                    }
+                    noteViewModel.insertOrUpdateNote(note)
+
+                }
+            }
+        )
         recyclerView.adapter = adapter
         editSearch = binding.editSearch
     }
@@ -77,20 +131,20 @@ class ReminderFragment : Fragment() {
     }
 
     private fun searchReminder(listNoteWithDetailsReminder: List<NoteWithDetails>) {
-        editSearch.addTextChangedListener(object  : TextWatcher{
+        editSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val listAfterSearch = listNoteWithDetailsReminder.filter {
-                    it.note.title.contains(s.toString() , true) ||
-                            it.note.content.contains(s.toString() , true)
+                    it.note.title.contains(s.toString(), true) ||
+                            it.note.content.contains(s.toString(), true)
                 }
                 adapter.updateChanged(listAfterSearch.toMutableList())
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if(s.toString().isBlank()){
+                if (s.toString().isBlank()) {
                     adapter.updateChanged(listNoteWithDetailsReminder.toMutableList())
                 }
             }
