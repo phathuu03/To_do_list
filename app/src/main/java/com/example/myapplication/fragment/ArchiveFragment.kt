@@ -91,8 +91,10 @@ class ArchiveFragment : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.listNoteWithDetailsArchive.observe(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) {
-                adapter.updateChange(it.toMutableList())
+            val listNotTrash = it.filter { !it.note.isTrash }
+
+            if (listNotTrash.isEmpty()) {
+                adapter.updateChange(listNotTrash.toMutableList())
                 binding.imgAdd.visibility = View.VISIBLE
                 binding.tvEmpty.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
@@ -100,8 +102,8 @@ class ArchiveFragment : Fragment() {
                 binding.imgAdd.visibility = View.GONE
                 binding.tvEmpty.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
-                adapter.updateChange(it.toMutableList())
-                searchArchive(it.toMutableList())
+                adapter.updateChange(listNotTrash.toMutableList())
+                searchArchive(listNotTrash.toMutableList())
             }
         }
 

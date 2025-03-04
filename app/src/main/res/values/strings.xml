@@ -64,5 +64,7 @@
     <string name="select_time">Get select time</string>
     <string name="txt_vn">Vietnamese</string>
     <string name="txt_korea">Korea</string>
+    <string name="txt_restore">Restore</string>
+    <string name="txt_delete">Delete</string>
 
 </resources>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
+import com.example.myapplication.TrashActivity
 import com.example.myapplication.activity.ChooseLanguageActivity
 import com.example.myapplication.databinding.FragmentSettingBinding
 import com.example.myapplication.utils.Utils
@@ -30,6 +31,7 @@ class SettingFragment : Fragment() {
 
         val language = Utils.getData(requireContext(), "language", "")
         val languageCurrent = when(language){
+            "" -> getString(R.string.txt_english)
             "en" -> getString(R.string.txt_english)
             "vi" -> getString(R.string.txt_vn)
             "kr" -> getString(R.string.txt_korea)
@@ -44,6 +46,10 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.layoutLanguage.setOnClickListener {
             val intent = Intent(requireContext() , ChooseLanguageActivity::class.java)
+            startActivity(intent)
+        }
+        binding.layoutTrash.setOnClickListener {
+            val intent = Intent(requireContext(), TrashActivity::class.java)
             startActivity(intent)
         }
     }

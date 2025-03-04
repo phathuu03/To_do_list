@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun initView() {
         btnAddNote = binding.btnAdd
         noteDao = DatabaseBuilder.getInstance(applicationContext).noteDao()
@@ -57,8 +58,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
 
-    }
 }

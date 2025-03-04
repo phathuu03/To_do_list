@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -23,6 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        <activity
+            android:name=".TrashActivity"
+            android:exported="false" />
         <activity
             android:name=".NoteDetailActivity"
             android:exported="false" />
@@ -36,9 +38,9 @@
         <activity
             android:name=".activity.ChooseLanguageActivity"
             android:exported="false" />
-        <activity android:name=".IntroActivity"
+        <activity
+            android:name=".IntroActivity"
             android:exported="false" />
-
         <activity
             android:name=".StartActivity"
             android:exported="true">

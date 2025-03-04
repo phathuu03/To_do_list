@@ -69,7 +69,10 @@ class HomeFragment() : Fragment() {
             if (it.isEmpty()) {
                 binding.layoutDataNull.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
+                binding.recyclerViewCategory.visibility = View.GONE
+
             } else {
+                binding.recyclerViewCategory.visibility = View.VISIBLE
                 recyclerView.visibility = View.VISIBLE
                 binding.layoutDataNull.visibility = View.GONE
                 initRecyclerViewNotes()
@@ -157,10 +160,14 @@ class HomeFragment() : Fragment() {
         val dataCategory = mutableListOf<String>("All")
 
         noteViewModel.listCategory.observe(viewLifecycleOwner) {
-            it?.forEach { cate ->
-                dataCategory.add(cate.nameCategory)
+            if (it.isNotEmpty()){
+                recyclerViewCategory.visibility =View.VISIBLE
+                it?.forEach { cate ->
+                    dataCategory.add(cate.nameCategory)
+                }
+                adapter.updateDataChanged(dataCategory)
             }
-            adapter.updateDataChanged(dataCategory)
+
         }
 
     }

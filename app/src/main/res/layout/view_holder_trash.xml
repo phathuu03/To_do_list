@@ -37,14 +37,13 @@
             />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btn_trash_note"
-        android:layout_width="@dimen/_24dp"
-        android:layout_height="@dimen/_24dp"
-        android:backgroundTint="@color/blue"
-        android:background="@drawable/ic_trash"
+    <RadioButton
+        android:id="@+id/rd_selected_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        />
 
 
 </RelativeLayout>

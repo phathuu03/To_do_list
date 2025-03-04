@@ -30,9 +30,9 @@ object Utils {
     }
 
      val languages = listOf(
-        LanguageApplication(1, "", TypeLanguage.EN,"English"),
-        LanguageApplication(2, "", TypeLanguage.VI,"Việt nam"),
-        LanguageApplication(3, "", TypeLanguage.KR,"Korea")
+        LanguageApplication(1, R.drawable.flag_amedica, TypeLanguage.EN,"English"),
+        LanguageApplication(2, R.drawable.flag_vietnam, TypeLanguage.VI,"Việt nam"),
+        LanguageApplication(3, R.drawable.flag_korea, TypeLanguage.KR,"Korea")
     )
 
     val emojiList = listOf(

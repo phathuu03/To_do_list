@@ -33,6 +33,6 @@ data class NoteEntity(
 
     val isArchive: Boolean = false,
 
-    val isTrash : Boolean = false
+    var isTrash : Boolean = false
 )
 

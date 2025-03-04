@@ -18,6 +18,5 @@ class MyReceiver : OnReceiveContentListener {
             // App-specific logic to handle the URI(s) in uriContent.
 
         }
-
         return remaining
     }}

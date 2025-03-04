@@ -22,7 +22,7 @@ class ChooseLanguageActivity : AppCompatActivity(), LanguageAdapter.OnItemSelect
         setContentView(binding.root)
 
         val currentLanguage = Utils.getData(this, "language", "")
-        adapter = LanguageAdapter(this, currentLanguage)
+        adapter = LanguageAdapter(this, currentLanguage, this)
         binding.recycleViewLanguage.layoutManager = LinearLayoutManager(this)
         binding.recycleViewLanguage.adapter = adapter
 

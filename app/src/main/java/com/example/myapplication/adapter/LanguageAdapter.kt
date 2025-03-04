@@ -1,14 +1,18 @@
 package com.example.myapplication.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.myapplication.R
 import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
 import com.example.myapplication.model.LanguageApplication
 import com.example.myapplication.utils.Utils.languages
 
-class LanguageAdapter(private val listener: OnItemSelectedListener, val currentLanguage: String) :
+class LanguageAdapter(private val listener: OnItemSelectedListener, private val currentLanguage: String , private val context: Context) :
     RecyclerView.Adapter<LanguageAdapter.ViewHolderLanguage>() {
     var selectedPosition = when(currentLanguage){
         "" -> 0
@@ -25,7 +29,16 @@ class LanguageAdapter(private val listener: OnItemSelectedListener, val currentL
 
         @SuppressLint("SuspiciousIndentation")
         fun bind(language: LanguageApplication, position: Int) {
+            val drawable = ContextCompat.getDrawable(context , language.flag)
+            drawable?.let {
+                Glide.with(context)
+                    .load(drawable)
+                    .circleCrop()
+                    .error(R.drawable.ic_country)
+                    .into(binding.imgFlag)
 
+
+            }
 
             binding.tvSelectedCountry.text = language.language
             rdBtn.isChecked = position == selectedPosition
