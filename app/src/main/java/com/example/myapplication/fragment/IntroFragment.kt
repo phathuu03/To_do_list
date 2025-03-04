@@ -2,18 +2,17 @@ package com.example.myapplication.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myapplication.MainActivity
-import com.example.myapplication.R
 import com.example.myapplication.adapter.ViewPage2IntroAdapter
 import com.example.myapplication.databinding.FragmentIntroBinding
+import com.example.myapplication.utils.Utils
 import me.relex.circleindicator.CircleIndicator3
 
 // TODO: Rename parameter arguments, choose names that match
@@ -63,6 +62,7 @@ class IntroFragment : Fragment() {
                 }
 
                 2 -> {
+                    Utils.saveData(requireContext(), "isStarted", true)
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()

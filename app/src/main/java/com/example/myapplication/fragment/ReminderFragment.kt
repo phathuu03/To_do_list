@@ -82,6 +82,7 @@ class ReminderFragment : Fragment() {
                         calendar?.minute = timePicker.minute
                     }
                     noteViewModel.insertOrUpdateNote(note)
+                    adapter.notifyDataSetChanged()
 
                 }
             }

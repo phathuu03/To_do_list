@@ -31,8 +31,8 @@ object Utils {
 
      val languages = listOf(
         LanguageApplication(1, "", TypeLanguage.EN,"English"),
-        LanguageApplication(2, "", TypeLanguage.VN,"Việt nam"),
-        LanguageApplication(3, "", TypeLanguage.KO,"Korea")
+        LanguageApplication(2, "", TypeLanguage.VI,"Việt nam"),
+        LanguageApplication(3, "", TypeLanguage.KR,"Korea")
     )
 
     val emojiList = listOf(
@@ -58,6 +58,10 @@ object Utils {
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
+
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
         }
 
         alarmManager.setExact(
@@ -82,6 +86,42 @@ object Utils {
         pendingIntent.cancel()
 
     }
+
+    fun saveData(context: Context, key: String, value: Any) {
+        val sharedPreferences = context.getSharedPreferences("myShared", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        when (value) {
+            is String -> editor.putString(key, value)
+            is Boolean -> editor.putBoolean(key, value)
+            is Int -> editor.putInt(key, value)
+            is Float -> editor.putFloat(key, value)
+            is Long -> editor.putLong(key, value)
+            is Set<*> -> {
+                if (value.all { it is String }) { // Đảm bảo là Set<String>
+                    editor.putStringSet(key, value as Set<String>)
+                } else {
+                    throw IllegalArgumentException("Only Set<String> is allowed in SharedPreferences")
+                }
+            }
+            else -> throw IllegalArgumentException("Unsupported data type")
+        }
+        editor.apply() // Chỉ gọi apply() một lần để tối ưu hiệu suất
+    }
+
+    fun <T> getData(context: Context, key: String, defaultValue: T): T {
+        val sharedPreferences = context.getSharedPreferences("myShared", Context.MODE_PRIVATE)
+        return when (defaultValue) {
+            is String -> sharedPreferences.getString(key, defaultValue) as T
+            is Boolean -> sharedPreferences.getBoolean(key, defaultValue) as T
+            is Int -> sharedPreferences.getInt(key, defaultValue) as T
+            is Float -> sharedPreferences.getFloat(key, defaultValue) as T
+            is Long -> sharedPreferences.getLong(key, defaultValue) as T
+            is Set<*> -> sharedPreferences.getStringSet(key, defaultValue as Set<String>) as T
+            else -> throw IllegalArgumentException("Unsupported data type")
+        }
+    }
+
 
 
 

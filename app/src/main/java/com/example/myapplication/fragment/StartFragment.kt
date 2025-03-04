@@ -1,15 +1,17 @@
 package com.example.myapplication.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.example.myapplication.R
+import com.example.myapplication.activity.ChooseLanguageActivity
 import com.example.myapplication.databinding.FragmentStartBinding
+import com.example.myapplication.utils.LocaleHelper
+import com.example.myapplication.utils.Utils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -36,15 +38,17 @@ class StartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val controller = findNavController()
 
+        val language = Utils.getData(requireContext() , "language" , "")
+        LocaleHelper.setLocale(requireContext(), language)
         viewLifecycleOwner.lifecycleScope.launch {
             delay(1000)
-            val action = StartFragmentDirections.actionStartFragmentToChooseLanguageFragment()
-            controller.navigate(action, NavOptions.Builder()
-                .setPopUpTo(R.id.startFragment, true)
-                .build()
-            )
+            val intent = Intent(requireContext() , ChooseLanguageActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+
 
         }
+
 
 
     }

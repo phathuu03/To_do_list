@@ -1,15 +1,14 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
-    private val binding by lazy {
-        ActivityIntroBinding.inflate(layoutInflater)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_intro2)
+
     }
 }

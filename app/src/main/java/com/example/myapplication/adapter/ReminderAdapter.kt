@@ -1,4 +1,5 @@
 package com.example.myapplication.adapter
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,17 +16,18 @@ class ReminderAdapter(
 
     inner class ViewHolderReminder(private val binding: ViewHolderReminderBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("DefaultLocale")
         fun bind(noteWithDetails: NoteWithDetails) {
             binding.tvTitle.text = noteWithDetails.note.title
 
-            // Kiểm tra và định dạng giờ phút an toàn
             val calendar = noteWithDetails.note.calendar
             val hour = calendar?.hour ?: 0
             val minute = calendar?.minute ?: 0
 
             binding.timeReminder.text = StringBuilder().apply {
-                append("$hour : $minute")
+                append(String.format("%02d:%02d", hour, minute))
                 append(if (hour >= 12) " PM" else " AM")
+
             }
 
             binding.timeReminder.setOnClickListener {

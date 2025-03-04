@@ -62,4 +62,7 @@
     <string name="add_check_list">Add check list</string>
     <string name="enter_task_content">enter content here</string>
     <string name="select_time">Get select time</string>
+    <string name="txt_vn">Vietnamese</string>
+    <string name="txt_korea">Korea</string>
+
 </resources>

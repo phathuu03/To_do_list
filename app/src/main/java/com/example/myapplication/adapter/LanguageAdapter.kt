@@ -8,10 +8,14 @@ import com.example.myapplication.databinding.ViewHolderSelectLanguageBinding
 import com.example.myapplication.model.LanguageApplication
 import com.example.myapplication.utils.Utils.languages
 
-class   LanguageAdapter(private val listener: OnItemSelectedListener) :
+class LanguageAdapter(private val listener: OnItemSelectedListener, val currentLanguage: String) :
     RecyclerView.Adapter<LanguageAdapter.ViewHolderLanguage>() {
-    private var selectedPosition = 0
-
+    var selectedPosition = when(currentLanguage){
+        "" -> 0
+        "vi" -> 1
+        "kr" ->2
+        else -> 0
+    }
 
 
     inner class ViewHolderLanguage(private val binding: ViewHolderSelectLanguageBinding) :
@@ -21,11 +25,12 @@ class   LanguageAdapter(private val listener: OnItemSelectedListener) :
 
         @SuppressLint("SuspiciousIndentation")
         fun bind(language: LanguageApplication, position: Int) {
+
+
             binding.tvSelectedCountry.text = language.language
             rdBtn.isChecked = position == selectedPosition
 
-
-                item.setOnClickListener {
+            item.setOnClickListener {
                 listener.onItemSelected(language, position)
             }
         }
@@ -33,7 +38,10 @@ class   LanguageAdapter(private val listener: OnItemSelectedListener) :
     }
 
     interface OnItemSelectedListener {
-        fun onItemSelected(language: LanguageApplication, position: Int)  // Định nghĩa sự kiện item được chọn
+        fun onItemSelected(
+            language: LanguageApplication,
+            position: Int
+        )  // Định nghĩa sự kiện item được chọn
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderLanguage {
